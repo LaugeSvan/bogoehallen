@@ -1,0 +1,54 @@
+# Configuration files
+config.php
+config.local.php
+.env
+.env.local
+
+# Encrypted credentials (NEVER COMMIT THESE!)
+/config/credentials.enc
+/config/.encryption-key
+/config/setup-credentials.php
+
+# Uploaded files and logs
+/admin/uploads/*
+!/admin/uploads/.gitkeep
+/logs/*
+!/logs/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Node (if ever used)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Composer (reference only, not used in this project)
+vendor/
+composer.lock
+
+# Session files
+session_*
+
+# PHP errors
+error_log
+php_errors.log
+
+# Temporary files
+temp/
+tmp/
+cache/
+
+# Testing
+test-*.php
