@@ -5,6 +5,7 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/security.php';
+require_once __DIR__ . '/includes/admin-functions.php';
 
 init_session();
 
