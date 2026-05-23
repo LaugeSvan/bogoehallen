@@ -200,6 +200,8 @@
                 <li><a href="/admin/edit_gallery.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'edit_gallery.php') ? 'active' : ''; ?>">Galleri</a></li>
                 <li><a href="/admin/edit_sponsors.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'edit_sponsors.php') ? 'active' : ''; ?>">Sponsorer</a></li>
                 <li><a href="/admin/audit_log.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'audit_log.php') ? 'active' : ''; ?>">Ændringslog</a></li>
+                <li><a href="/admin/change_password.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'change_password.php') ? 'active' : ''; ?>">Skift Adgangskode</a></li>
+                <li><a href="/admin/manage_users.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'manage_users.php') ? 'active' : ''; ?>">Bruger Administration</a></li>
             </ul>
         </aside>
 
