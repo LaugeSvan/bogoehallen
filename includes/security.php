@@ -89,7 +89,7 @@ function log_audit($user_id, $action, $table_affected, $record_id, $old_value = 
     $new_json = $new_value ? json_encode($new_value) : null;
 
     $stmt->bind_param(
-        'issiiss',
+        'ississ',
         $user_id,
         $action,
         $table_affected,
