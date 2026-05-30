@@ -27,6 +27,8 @@ jobs:
             mirror -R --delete --verbose \
               --exclude .git/ \
               --exclude .github/ \
+              --exclude config.php \
+              --exclude uploads/ \
               ./ /hal/;
             quit
           "
