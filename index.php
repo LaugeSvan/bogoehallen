@@ -40,8 +40,9 @@ if ($hours_result) {
 <section class="section">
     <div class="gallery">
         <?php foreach ($gallery as $item): ?>
+            <?php $image_url = normalize_upload_url($item['image_path'] ?? ''); ?>
             <div class="gallery-item">
-                <img src="<?php echo safe_html($item['image_path']); ?>" alt="<?php echo safe_html($item['caption']); ?>">
+                <img src="<?php echo safe_html($image_url); ?>" alt="<?php echo safe_html($item['caption']); ?>">
                 <div class="gallery-item-caption"><?php echo safe_html($item['caption'] ?: ''); ?></div>
             </div>
         <?php endforeach; ?>

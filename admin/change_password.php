@@ -37,7 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Nuværende adgangskode er forkert.';
             } else {
                 $new_hash = hash_password($new);
-                $db->query("UPDATE users SET password = '$new_hash' WHERE id = $user_id");
+                $update_stmt = $db->prepare('UPDATE users SET password = ? WHERE id = ?');
+                if ($update_stmt) {
+                    $update_stmt->bind_param('si', $new_hash, $user_id);
+                    $update_stmt->execute();
+                    $update_stmt->close();
+                }
                 log_audit($user_id, 'changed_password', 'users', $user_id);
                 destroy_admin_session();
                 header('Refresh: 2; url=/admin/login.php?password_changed=1');

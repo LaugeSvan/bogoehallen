@@ -51,7 +51,7 @@ function handle_image_upload($file, $destination_dir = null, $resize_width = nul
         'success' => true,
         'filename' => $filename,
         'path' => $filepath,
-        'url' => str_replace(__DIR__ . '/../../', '/', $filepath)
+        'url' => rtrim(UPLOADS_PUBLIC_PATH, '/') . '/' . $filename
     ];
 }
 

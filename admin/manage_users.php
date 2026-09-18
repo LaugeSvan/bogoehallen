@@ -26,14 +26,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
         } elseif (strlen($password) < 8) {
             $error = 'Adgangskoden skal være mindst 8 tegn.';
         } else {
-            $check = $db->query("SELECT id FROM users WHERE username = '$username'");
-            if ($check->num_rows > 0) {
-                $error = 'Brugernavn findes allerede.';
+            $role = in_array($role, ['editor', 'super_admin'], true) ? $role : 'editor';
+
+            $check = $db->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+            if (!$check) {
+                $error = 'Database-fejl ved brugerkontrol.';
             } else {
-                $hash = hash_password($password);
-                $db->query("INSERT INTO users (username, password, role) VALUES ('$username', '$hash', '$role')");
-                log_audit(get_current_user_id(), 'created_user', 'users', $db->insert_id);
-                $success = 'Bruger oprettet!';
+                $check->bind_param('s', $username);
+                $check->execute();
+                $existing = $check->get_result();
+
+                if ($existing->num_rows > 0) {
+                    $error = 'Brugernavn findes allerede.';
+                } else {
+                    $hash = hash_password($password);
+                    $insert = $db->prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)');
+                    if (!$insert) {
+                        $error = 'Database-fejl ved oprettelse af bruger.';
+                    } else {
+                        $insert->bind_param('sss', $username, $hash, $role);
+                        $insert->execute();
+                        log_audit(get_current_user_id(), 'created_user', 'users', $db->insert_id);
+                        $success = 'Bruger oprettet!';
+                        $insert->close();
+                    }
+                }
+
+                $check->close();
             }
         }
     }
@@ -45,7 +64,12 @@ if (isset($_GET['delete']) && isset($_GET['user_id'])) {
     if ($user_id === $current_id) {
         $error = 'Du kan ikke slette din egen bruger.';
     } else {
-        $db->query("DELETE FROM users WHERE id = $user_id");
+        $delete_stmt = $db->prepare('DELETE FROM users WHERE id = ?');
+        if ($delete_stmt) {
+            $delete_stmt->bind_param('i', $user_id);
+            $delete_stmt->execute();
+            $delete_stmt->close();
+        }
         log_audit($current_id, 'deleted_user', 'users', $user_id);
         $success = 'Bruger slettet!';
     }

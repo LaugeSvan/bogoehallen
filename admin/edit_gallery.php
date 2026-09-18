@@ -248,8 +248,9 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     <?php if (count($images) > 0): ?>
         <div class="gallery-grid">
             <?php foreach ($images as $image): ?>
+                <?php $image_url = normalize_upload_url($image['image_path'] ?? ''); ?>
                 <div class="gallery-item">
-                    <img src="<?php echo safe_html($image['image_path']); ?>" alt="<?php echo safe_html($image['caption']); ?>">
+                    <img src="<?php echo safe_html($image_url); ?>" alt="<?php echo safe_html($image['caption']); ?>">
                     <div class="gallery-item-info">
                         <div class="gallery-item-caption"><?php echo safe_html($image['caption'] ?: 'Uden tekst'); ?></div>
                         <div class="gallery-item-actions">

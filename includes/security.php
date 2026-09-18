@@ -53,6 +53,28 @@ function sanitize_input($input) {
 }
 
 /**
+ * Normalize uploaded image URLs so legacy filesystem paths continue to render properly.
+ */
+function normalize_upload_url($path) {
+    if (empty($path)) {
+        return '';
+    }
+
+    $path = trim($path);
+    if (preg_match('#^https?://#i', $path)) {
+        return $path;
+    }
+    if (str_starts_with($path, '/admin/uploads/')) {
+        return $path;
+    }
+    if (preg_match('#^/(?:var|home|srv|www|Users)/#', $path) || preg_match('#^[A-Za-z]:\\#', $path)) {
+        return UPLOADS_PUBLIC_PATH . '/' . basename($path);
+    }
+
+    return $path;
+}
+
+/**
  * Sanitize for HTML output
  */
 function safe_html($text) {
