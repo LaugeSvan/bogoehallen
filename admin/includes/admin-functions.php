@@ -101,6 +101,7 @@ function authenticate_user($username, $password) {
  */
 function create_admin_session($user) {
     init_session();
+    session_regenerate_id(true);
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['role'] = $user['role'];

@@ -58,21 +58,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
     }
 }
 
-if (isset($_GET['delete']) && isset($_GET['user_id'])) {
-    $user_id = (int)$_GET['user_id'];
-    $current_id = get_current_user_id();
-    if ($user_id === $current_id) {
-        $error = 'Du kan ikke slette din egen bruger.';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        $error = 'CSRF validering mislykkedes.';
     } else {
-        $delete_stmt = $db->prepare('DELETE FROM users WHERE id = ?');
-        if ($delete_stmt) {
-            $delete_stmt->bind_param('i', $user_id);
-            $delete_stmt->execute();
-            $delete_stmt->close();
+        $user_id = (int)($_POST['user_id'] ?? 0);
+        $current_id = get_current_user_id();
+
+        if ($user_id === $current_id) {
+            $error = 'Du kan ikke slette din egen bruger.';
+        } else {
+            $delete_stmt = $db->prepare('DELETE FROM users WHERE id = ?');
+            if ($delete_stmt) {
+                $delete_stmt->bind_param('i', $user_id);
+                if ($delete_stmt->execute() && $delete_stmt->affected_rows > 0) {
+                    log_audit($current_id, 'deleted_user', 'users', $user_id);
+                    header('Location: /admin/manage_users.php?success=deleted');
+                    exit;
+                }
+                $delete_stmt->close();
+            }
+
+            $error = 'Brugeren kunne ikke slettes.';
         }
-        log_audit($current_id, 'deleted_user', 'users', $user_id);
-        $success = 'Bruger slettet!';
     }
+}
+
+if (($_GET['success'] ?? '') === 'deleted') {
+    $success = 'Bruger slettet!';
 }
 
 $users = $db->query('SELECT id, username, role, created_at FROM users ORDER BY created_at DESC')->fetch_all(MYSQLI_ASSOC);
@@ -131,9 +144,12 @@ require_once __DIR__ . '/includes/header.php';
                             <td style="padding: 10px; color: #7f8c8d;"><?php echo date('d/m/Y', strtotime($user['created_at'])); ?></td>
                             <td style="padding: 10px; text-align: right;">
                                 <?php if ($user['id'] != get_current_user_id()): ?>
-                                    <a href="?delete=1&user_id=<?php echo $user['id']; ?>" 
-                                       onclick="return confirm('Er du sikker?');"
-                                       style="color: #e74c3c; text-decoration: none; font-size: 12px;">Slet</a>
+                                    <form method="POST" onsubmit="return confirm('Er du sikker?');">
+                                        <input type="hidden" name="delete_user" value="1">
+                                        <input type="hidden" name="user_id" value="<?php echo (int)$user['id']; ?>">
+                                        <?php echo csrf_input(); ?>
+                                        <button type="submit" style="color: #e74c3c; background: none; border: 0; padding: 0; font-size: 12px; cursor: pointer;">Slet</button>
+                                    </form>
                                 <?php else: ?>
                                     <span style="color: #ccc; font-size: 12px;">(Dig selv)</span>
                                 <?php endif; ?>

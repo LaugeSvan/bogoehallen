@@ -48,30 +48,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
 }
 
 // Handle image deletion
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $id = (int)$_GET['delete'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_image'])) {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        $error = 'CSRF-validering mislykkedes';
+    } else {
+        $id = (int)($_POST['image_id'] ?? 0);
+        $select_stmt = $db->prepare('SELECT image_path FROM gallery_images WHERE id = ?');
 
-    $stmt = $db->prepare('SELECT image_path FROM gallery_images WHERE id = ?');
-    if ($stmt) {
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
+        if ($select_stmt) {
+            $select_stmt->bind_param('i', $id);
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
             $row = $result->fetch_assoc();
-            $filepath = __DIR__ . '/..' . $row['image_path'];
+            $select_stmt->close();
 
-            delete_image($filepath);
-
-            $stmt = $db->prepare('DELETE FROM gallery_images WHERE id = ?');
-            $stmt->bind_param('i', $id);
-            if ($stmt->execute()) {
-                log_audit(get_current_user_id(), 'deleted_image', 'gallery_images', $id, ['image' => $row['image_path']], null);
-                header('Location: /admin/edit_gallery.php?success=deleted');
-                exit;
+            if ($row) {
+                $delete_stmt = $db->prepare('DELETE FROM gallery_images WHERE id = ?');
+                if ($delete_stmt) {
+                    $delete_stmt->bind_param('i', $id);
+                    if ($delete_stmt->execute() && $delete_stmt->affected_rows > 0) {
+                        $image_url = normalize_upload_url($row['image_path']);
+                        if (str_starts_with($image_url, UPLOADS_PUBLIC_PATH . '/')) {
+                            $filename = basename(parse_url($image_url, PHP_URL_PATH));
+                            delete_image(UPLOADS_DIR . '/' . $filename);
+                        }
+                        log_audit(get_current_user_id(), 'deleted_image', 'gallery_images', $id, ['image' => $row['image_path']], null);
+                        header('Location: /admin/edit_gallery.php?success=deleted');
+                        exit;
+                    }
+                    $delete_stmt->close();
+                }
             }
+
+            $error = 'Billedet kunne ikke slettes.';
         }
-        $stmt->close();
     }
 }
 
@@ -254,7 +264,12 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                     <div class="gallery-item-info">
                         <div class="gallery-item-caption"><?php echo safe_html($image['caption'] ?: 'Uden tekst'); ?></div>
                         <div class="gallery-item-actions">
-                            <a href="/admin/edit_gallery.php?delete=<?php echo $image['id']; ?>" class="delete-btn" onclick="return confirm('Slet dette billede?');">Slet</a>
+                            <form method="POST" onsubmit="return confirm('Slet dette billede?');">
+                                <input type="hidden" name="delete_image" value="1">
+                                <input type="hidden" name="image_id" value="<?php echo (int)$image['id']; ?>">
+                                <?php echo csrf_input(); ?>
+                                <button type="submit" class="delete-btn">Slet</button>
+                            </form>
                         </div>
                     </div>
                 </div>
