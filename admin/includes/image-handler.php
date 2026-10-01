@@ -130,9 +130,6 @@ function resize_image($filepath, $max_width, $max_height) {
             break;
     }
 
-    imagedestroy($source);
-    imagedestroy($resized);
-
     return ['success' => true, 'size' => ['width' => $new_width, 'height' => $new_height]];
 }
 
