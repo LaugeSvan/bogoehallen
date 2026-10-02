@@ -34,50 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
             set_content('board', 'text', $_POST['board_text'], $user_id);
         }
 
-        $contact_label_defaults = [
-            'name' => 'Navn',
-            'email' => 'Email',
-            'subject' => 'Emne',
-            'message' => 'Besked',
-            'submit' => 'Send besked',
-        ];
-        foreach ($contact_label_defaults as $key => $default_label) {
-            $label = trim($_POST['contact_' . $key . '_label'] ?? '');
-            if ($label !== '') {
-                set_content('contact_form', $key . '_label', $label, $user_id);
-            }
-        }
-
-        $navigation_defaults = [
-            'home' => ['Forside', '/'],
-            'board' => ['Bestyrelsen', '/bestyrelsen.php'],
-            'about' => ['Om os', '/om-os.php'],
-            'contact' => ['Kontakt', '/kontakt.php'],
-        ];
-        foreach ($navigation_defaults as $key => $defaults) {
-            $label = trim($_POST['nav_' . $key . '_label'] ?? $defaults[0]);
-            if ($label !== '') {
-                set_content('header', 'nav_' . $key . '_label', $label, $user_id);
-            }
-            $url = safe_navigation_url($_POST['nav_' . $key . '_url'] ?? $defaults[1], $defaults[1]);
-            set_content('header', 'nav_' . $key . '_url', $url, $user_id);
-        }
-
         // Update footer content
         if (isset($_POST['footer_address'])) {
             set_content('footer', 'address', $_POST['footer_address'], $user_id);
             set_content('footer', 'cvr', $_POST['footer_cvr'], $user_id);
-            $contact_email = filter_var(trim($_POST['footer_contact_email'] ?? ''), FILTER_VALIDATE_EMAIL);
-            if ($contact_email !== false) {
-                set_content('footer', 'contact_email', $contact_email, $user_id);
-            } else {
-                $error = 'Ugyldig kontakt-email. Den tidligere emailadresse er bevaret.';
-            }
-            set_content('footer', 'facebook_url', safe_navigation_url($_POST['footer_facebook_url'], ''), $user_id);
-            set_content('footer', 'google_maps_query', $_POST['footer_google_maps_query'] ?? '', $user_id);
-            set_content('footer', 'bylaws_url', safe_navigation_url($_POST['footer_bylaws_url'] ?? '', '/vedtaegt.php'), $user_id);
-            set_content('footer', 'sponsor_url', safe_navigation_url($_POST['footer_sponsor_url'] ?? '', '/bliv-sponsor.php'), $user_id);
-            set_content('footer', 'contact_url', safe_navigation_url($_POST['footer_contact_url'] ?? '', '/kontakt.php'), $user_id);
         }
 
         if (isset($_FILES['site_logo']) && $_FILES['site_logo']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -112,13 +72,7 @@ $about_text = get_content('main', 'about_text', 'Bogø Hallen er Danmarks modern
 $board_title = get_content('board', 'title', 'Bestyrelsen');
 $board_text = get_content('board', 'text', 'Bestyrelsen varetager Bogø Hallens daglige drift og udvikling. Kontakt os gerne via kontaktsiden.');
 $footer_address = get_content('footer', 'address', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod');
-$footer_google_maps_query = get_content('footer', 'google_maps_query', $footer_address);
-$footer_bylaws_url = get_content('footer', 'bylaws_url', '/vedtaegt.php');
-$footer_sponsor_url = get_content('footer', 'sponsor_url', '/bliv-sponsor.php');
-$footer_contact_url = get_content('footer', 'contact_url', '/kontakt.php');
 $footer_cvr = get_content('footer', 'cvr', 'CVR: 12345678');
-$footer_contact_email = get_content('footer', 'contact_email', 'kontakt@bogohallen.dk');
-$footer_facebook_url = get_content('footer', 'facebook_url', 'https://facebook.com/bogohallen');
 $site_logo = normalize_upload_url(get_content('header', 'logo', ''));
 $opening_hours = get_opening_hours();
 
@@ -274,32 +228,6 @@ $opening_hours = get_opening_hours();
     </div>
 
     <div class="form-section">
-        <h3>Navigation</h3>
-        <?php
-        $navigation_defaults = [
-            'home' => ['Forside', '/'],
-            'board' => ['Bestyrelsen', '/bestyrelsen.php'],
-            'about' => ['Om os', '/om-os.php'],
-            'contact' => ['Kontakt', '/kontakt.php'],
-        ];
-        foreach ($navigation_defaults as $key => $defaults):
-            $label = get_content('header', 'nav_' . $key . '_label', $defaults[0]);
-            $url = get_content('header', 'nav_' . $key . '_url', $defaults[1]);
-        ?>
-            <div class="form-group-row">
-                <div class="form-group">
-                    <label for="nav_<?php echo $key; ?>_label"><?php echo safe_html($defaults[0]); ?> - tekst</label>
-                    <input type="text" id="nav_<?php echo $key; ?>_label" name="nav_<?php echo $key; ?>_label" value="<?php echo safe_html($label); ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="nav_<?php echo $key; ?>_url"><?php echo safe_html($defaults[0]); ?> - link</label>
-                    <input type="text" id="nav_<?php echo $key; ?>_url" name="nav_<?php echo $key; ?>_url" value="<?php echo safe_html($url); ?>" required>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="form-section">
         <h3>Bestyrelsen</h3>
         <div class="form-group">
             <label for="board_title">Titel</label>
@@ -322,26 +250,6 @@ $opening_hours = get_opening_hours();
         </div>
     </div>
 
-    <div class="form-section">
-        <h3>Kontaktformular</h3>
-        <?php
-        $contact_label_defaults = [
-            'name' => 'Navn',
-            'email' => 'Email',
-            'subject' => 'Emne',
-            'message' => 'Besked',
-            'submit' => 'Send besked',
-        ];
-        foreach ($contact_label_defaults as $key => $default_label):
-            $label = get_content('contact_form', $key . '_label', $default_label);
-        ?>
-            <div class="form-group">
-                <label for="contact_<?php echo $key; ?>_label"><?php echo safe_html($default_label); ?></label>
-                <input type="text" id="contact_<?php echo $key; ?>_label" name="contact_<?php echo $key; ?>_label" value="<?php echo safe_html($label); ?>" required>
-            </div>
-        <?php endforeach; ?>
-    </div>
-
     <!-- Footer Section -->
     <div class="form-section">
         <h3>Sideinformationer</h3>
@@ -352,40 +260,8 @@ $opening_hours = get_opening_hours();
         </div>
 
         <div class="form-group">
-            <label for="footer_google_maps_query">Google Maps placering</label>
-            <input type="text" id="footer_google_maps_query" name="footer_google_maps_query" value="<?php echo safe_html($footer_google_maps_query); ?>" placeholder="Adresse eller koordinater">
-        </div>
-
-        <div class="form-group-row">
-            <div class="form-group">
-                <label for="footer_contact_url">Link til kontakt</label>
-                <input type="text" id="footer_contact_url" name="footer_contact_url" value="<?php echo safe_html($footer_contact_url); ?>">
-            </div>
-            <div class="form-group">
-                <label for="footer_bylaws_url">Link til vedtægt</label>
-                <input type="text" id="footer_bylaws_url" name="footer_bylaws_url" value="<?php echo safe_html($footer_bylaws_url); ?>">
-            </div>
-            <div class="form-group">
-                <label for="footer_sponsor_url">Link til bliv sponsor</label>
-                <input type="text" id="footer_sponsor_url" name="footer_sponsor_url" value="<?php echo safe_html($footer_sponsor_url); ?>">
-            </div>
-        </div>
-
-        <div class="form-group-row">
-            <div class="form-group">
-                <label for="footer_cvr">CVR</label>
-                <input type="text" id="footer_cvr" name="footer_cvr" value="<?php echo safe_html($footer_cvr); ?>">
-            </div>
-
-            <div class="form-group">
-                <label for="footer_contact_email">Kontakt Email</label>
-                <input type="email" id="footer_contact_email" name="footer_contact_email" value="<?php echo safe_html($footer_contact_email); ?>">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="footer_facebook_url">Facebook URL</label>
-            <input type="url" id="footer_facebook_url" name="footer_facebook_url" placeholder="https://facebook.com/..." value="<?php echo safe_html($footer_facebook_url); ?>">
+            <label for="footer_cvr">CVR</label>
+            <input type="text" id="footer_cvr" name="footer_cvr" value="<?php echo safe_html($footer_cvr); ?>">
         </div>
     </div>
 

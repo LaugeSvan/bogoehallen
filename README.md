@@ -19,7 +19,8 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 ### Admin Panel
 - **Secure Authentication**: Session-based login with bcrypt password hashing
 - **Content Management**:
-   - Edit main and board text, navigation links, logo, footer, and opening hours
+   - Edit main and board text, logo, address, CVR, and opening hours
+   - Contact form settings, navigation and footer links, social links, and Google Maps location are fixed and not editable in the admin panel
    - Format main text with the built-in rich-text toolbar
   - Manage gallery images with auto-resize
   - Manage sponsor logos and links
@@ -90,8 +91,9 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 Overview of system statistics and recent changes.
 
 ### Edit Content (`/admin/edit_content.php`)
-- Update main text, board page content, logo, navigation, and contact form labels
-- Edit footer information, links, Maps location, CVR, and contact email
+- Update main text, board page content, and logo
+- Edit the displayed address, CVR, and opening hours
+- Contact form settings, navigation and footer links, social links, Maps location, and contact email cannot be changed in the admin panel
 - Manage opening hours for each day
 
 ### Gallery Manager (`/admin/edit_gallery.php`)
