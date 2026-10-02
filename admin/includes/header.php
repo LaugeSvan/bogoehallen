@@ -10,6 +10,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($page_title) ? safe_html($page_title) . ' - ' : ''; ?>Admin - Bogø Hallen</title>
     <style>
+        :root {
+            --bg: #071a2a;
+            --panel: #0d2237;
+            --panel-strong: #11314d;
+            --surface: #122d46;
+            --surface-soft: #163a5b;
+            --line: rgba(255, 255, 255, 0.08);
+            --text: #e9edf2;
+            --muted: #a8b5c3;
+            --blue: #3C85BA;
+            --green: #2B7B35;
+            --navy: #002748;
+            --danger: #d85b5b;
+            --warning: #d1a952;
+            --success: #2d8a4f;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,28 +35,34 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: linear-gradient(180deg, #071a2a 0%, #0b2038 100%);
+            color: var(--text);
         }
 
         .admin-container {
             display: flex;
             min-height: 100vh;
+            background: var(--bg);
         }
 
         .sidebar {
             width: 250px;
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            background: rgba(8, 20, 33, 0.96);
+            color: var(--text);
+            padding: 24px 18px;
+            border-right: 1px solid var(--line);
+            box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.03);
         }
 
         .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #34495e;
-            padding-bottom: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 24px;
+            padding: 0 12px 12px;
+            border-bottom: 1px solid var(--line);
         }
 
         .sidebar ul {
@@ -47,55 +70,57 @@
         }
 
         .sidebar li {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .sidebar a {
             display: block;
-            color: #ecf0f1;
+            color: var(--muted);
             text-decoration: none;
-            padding: 10px 12px;
-            border-radius: 4px;
-            transition: background 0.3s;
+            padding: 11px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
             font-size: 14px;
+            font-weight: 600;
         }
 
         .sidebar a:hover,
         .sidebar a.active {
-            background: #34495e;
-            color: #3498db;
+            background: rgba(60, 133, 186, 0.14);
+            color: var(--text);
+            border: 1px solid rgba(60, 133, 186, 0.28);
         }
 
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
 
         .header {
-            background: white;
-            border-bottom: 1px solid #ddd;
-            padding: 20px 30px;
+            background: rgba(15, 31, 48, 0.96);
+            border-bottom: 1px solid var(--line);
+            padding: 22px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .header-title h1 {
             font-size: 24px;
-            color: #2c3e50;
+            color: var(--text);
+            margin-bottom: 4px;
         }
 
         .header-title p {
             font-size: 13px;
-            color: #7f8c8d;
-            margin-top: 4px;
+            color: var(--muted);
         }
 
         .user-menu {
             display: flex;
-            gap: 15px;
+            gap: 16px;
             align-items: center;
         }
 
@@ -106,65 +131,69 @@
 
         .user-info strong {
             display: block;
-            color: #2c3e50;
+            color: var(--text);
+            font-weight: 700;
         }
 
         .user-info small {
-            color: #7f8c8d;
+            color: var(--muted);
         }
 
         .logout-btn {
-            padding: 8px 16px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
+            padding: 9px 16px;
+            background: rgba(216, 91, 91, 0.12);
+            color: #f7dada;
+            border: 1px solid rgba(216, 91, 91, 0.38);
+            border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
             text-decoration: none;
             display: inline-block;
-            transition: background 0.3s;
+            transition: all 0.2s ease;
+            font-weight: 600;
         }
 
         .logout-btn:hover {
-            background: #c0392b;
+            background: rgba(216, 91, 91, 0.2);
         }
 
         .content {
             flex: 1;
-            padding: 30px;
+            padding: 28px 30px 40px;
             overflow-y: auto;
+            background: linear-gradient(180deg, rgba(13, 34, 55, 0.95), rgba(8, 20, 33, 1));
         }
 
         .alert {
-            padding: 15px;
-            border-radius: 4px;
+            padding: 14px 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
             font-size: 14px;
+            border: 1px solid transparent;
         }
 
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: rgba(45, 138, 79, 0.12);
+            color: #c9f2d7;
+            border-color: rgba(45, 138, 79, 0.35);
         }
 
         .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(216, 91, 91, 0.1);
+            color: #ffd9d9;
+            border-color: rgba(216, 91, 91, 0.35);
         }
 
         .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
+            background: rgba(209, 169, 82, 0.12);
+            color: #f6e2ae;
+            border-color: rgba(209, 169, 82, 0.32);
         }
 
         .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background: rgba(60, 133, 186, 0.12);
+            color: #d9ebfb;
+            border-color: rgba(60, 133, 186, 0.35);
         }
 
         @media (max-width: 768px) {
@@ -174,18 +203,23 @@
 
             .sidebar {
                 width: 100%;
-                display: flex;
-                align-items: center;
+                border-right: none;
+                border-bottom: 1px solid var(--line);
             }
 
             .header {
                 flex-direction: column;
-                text-align: center;
+                align-items: flex-start;
+                gap: 16px;
             }
 
             .user-menu {
-                margin-top: 15px;
-                flex-direction: column;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .content {
+                padding: 22px 18px 30px;
             }
         }
     </style>

@@ -49,37 +49,40 @@ if ($stmt) {
 
 <style>
     .audit-section {
-        background: white;
+        background: rgba(17, 49, 77, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
         padding: 20px;
-        border-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .audit-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 13px;
+        color: #edf3fa;
     }
 
     .audit-table thead {
-        background: #f9f9f9;
-        border-bottom: 2px solid #ecf0f1;
+        background: rgba(255,255,255,0.02);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
     .audit-table th {
         padding: 12px;
         text-align: left;
         font-weight: 600;
-        color: #2c3e50;
+        color: #a8b7c8;
     }
 
     .audit-table td {
         padding: 12px;
-        border-bottom: 1px solid #ecf0f1;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        color: #edf3fa;
     }
 
     .audit-table tr:hover {
-        background: #f9f9f9;
+        background: rgba(255,255,255,0.02);
     }
 
     .action-badge {
@@ -91,13 +94,13 @@ if ($stmt) {
         text-transform: uppercase;
     }
 
-    .action-updated { background: #d4edda; color: #155724; }
-    .action-added { background: #cfe2ff; color: #084298; }
-    .action-deleted { background: #f8d7da; color: #842029; }
-    .action-uploaded { background: #fff3cd; color: #664d03; }
+    .action-updated { background: rgba(45, 138, 79, 0.2); color: #d6fbe0; }
+    .action-added { background: rgba(60, 133, 186, 0.2); color: #d9ebfb; }
+    .action-deleted { background: rgba(216, 91, 91, 0.18); color: #ffdfe1; }
+    .action-uploaded { background: rgba(209, 169, 82, 0.18); color: #f6e2ae; }
 
     .timestamp {
-        color: #7f8c8d;
+        color: #a8b7c8;
         white-space: nowrap;
     }
 
@@ -106,7 +109,7 @@ if ($stmt) {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        color: #7f8c8d;
+        color: #a8b7c8;
         font-family: monospace;
         font-size: 12px;
     }
@@ -121,35 +124,37 @@ if ($stmt) {
     .pagination a,
     .pagination span {
         padding: 8px 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
         text-decoration: none;
-        color: #3498db;
+        color: #7bb5df;
         font-size: 13px;
+        background: rgba(255,255,255,0.02);
     }
 
     .pagination a:hover {
-        background: #f9f9f9;
+        background: rgba(255,255,255,0.04);
     }
 
     .pagination span.current {
-        background: #3498db;
+        background: #3C85BA;
         color: white;
-        border-color: #3498db;
+        border-color: #3C85BA;
     }
 
     .pagination span.disabled {
-        color: #ccc;
+        color: #6d7f91;
         cursor: not-allowed;
     }
 
     .stats {
         margin-bottom: 20px;
         padding: 15px;
-        background: #f9f9f9;
-        border-radius: 4px;
+        background: rgba(255,255,255,0.02);
+        border-radius: 8px;
         font-size: 13px;
-        color: #7f8c8d;
+        color: #a8b7c8;
+        border: 1px solid rgba(255,255,255,0.08);
     }
 </style>
 

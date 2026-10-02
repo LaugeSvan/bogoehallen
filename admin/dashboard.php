@@ -56,54 +56,54 @@ require_once __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid #3498db;">
-        <h3 style="font-size: 12px; color: #7f8c8d; margin-bottom: 10px; text-transform: uppercase;">Brugere</h3>
-        <p style="font-size: 28px; font-weight: bold; color: #2c3e50;"><?php echo $stats['users']; ?></p>
+    <div style="background: rgba(17, 49, 77, 0.9); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-left: 4px solid #3C85BA;">
+        <h3 style="font-size: 12px; color: #a8b7c8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em;">Brugere</h3>
+        <p style="font-size: 28px; font-weight: bold; color: #edf3fa;"><?php echo $stats['users']; ?></p>
     </div>
 
-    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid #2ecc71;">
-        <h3 style="font-size: 12px; color: #7f8c8d; margin-bottom: 10px; text-transform: uppercase;">Sponsorer</h3>
-        <p style="font-size: 28px; font-weight: bold; color: #2c3e50;"><?php echo $stats['sponsors']; ?></p>
+    <div style="background: rgba(17, 49, 77, 0.9); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-left: 4px solid #2B7B35;">
+        <h3 style="font-size: 12px; color: #a8b7c8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em;">Sponsorer</h3>
+        <p style="font-size: 28px; font-weight: bold; color: #edf3fa;"><?php echo $stats['sponsors']; ?></p>
     </div>
 
-    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid #e74c3c;">
-        <h3 style="font-size: 12px; color: #7f8c8d; margin-bottom: 10px; text-transform: uppercase;">Galleribilledbeder</h3>
-        <p style="font-size: 28px; font-weight: bold; color: #2c3e50;"><?php echo $stats['gallery']; ?></p>
+    <div style="background: rgba(17, 49, 77, 0.9); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-left: 4px solid #d85b5b;">
+        <h3 style="font-size: 12px; color: #a8b7c8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em;">Galleribilledbeder</h3>
+        <p style="font-size: 28px; font-weight: bold; color: #edf3fa;"><?php echo $stats['gallery']; ?></p>
     </div>
 
-    <div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid #f39c12;">
-        <h3 style="font-size: 12px; color: #7f8c8d; margin-bottom: 10px; text-transform: uppercase;">Ændringer (7 dage)</h3>
-        <p style="font-size: 28px; font-weight: bold; color: #2c3e50;"><?php echo $stats['recent_changes']; ?></p>
+    <div style="background: rgba(17, 49, 77, 0.9); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-left: 4px solid #d1a952;">
+        <h3 style="font-size: 12px; color: #a8b7c8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em;">Ændringer (7 dage)</h3>
+        <p style="font-size: 28px; font-weight: bold; color: #edf3fa;"><?php echo $stats['recent_changes']; ?></p>
     </div>
 </div>
 
-<div style="background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <h2 style="font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px;">Seneste Ændringer</h2>
+<div style="background: rgba(17, 49, 77, 0.9); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+    <h2 style="font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; color: #edf3fa;">Seneste Ændringer</h2>
 
     <?php if ($recent_log && $recent_log->num_rows > 0): ?>
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #edf3fa;">
             <thead>
-                <tr style="background: #f9f9f9; border-bottom: 2px solid #ecf0f1;">
-                    <th style="padding: 10px; text-align: left; font-weight: 600;">Handling</th>
-                    <th style="padding: 10px; text-align: left; font-weight: 600;">Tabel</th>
-                    <th style="padding: 10px; text-align: left; font-weight: 600;">Bruger</th>
-                    <th style="padding: 10px; text-align: left; font-weight: 600;">Tidspunkt</th>
+                <tr style="background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <th style="padding: 10px; text-align: left; font-weight: 600; color: #a8b7c8;">Handling</th>
+                    <th style="padding: 10px; text-align: left; font-weight: 600; color: #a8b7c8;">Tabel</th>
+                    <th style="padding: 10px; text-align: left; font-weight: 600; color: #a8b7c8;">Bruger</th>
+                    <th style="padding: 10px; text-align: left; font-weight: 600; color: #a8b7c8;">Tidspunkt</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($row = $recent_log->fetch_assoc()): ?>
-                    <tr style="border-bottom: 1px solid #ecf0f1;">
-                        <td style="padding: 10px;"><span style="background: #ecf0f1; padding: 3px 8px; border-radius: 3px; font-size: 12px;"><?php echo safe_html($row['action']); ?></span></td>
-                        <td style="padding: 10px;"><?php echo safe_html($row['table_affected']); ?></td>
-                        <td style="padding: 10px;"><?php echo safe_html($row['username'] ?? 'Systemadministrator'); ?></td>
-                        <td style="padding: 10px; color: #7f8c8d;"><?php echo date('d/m/Y H:i', strtotime($row['timestamp'])); ?></td>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                        <td style="padding: 10px;"><span style="background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 3px; font-size: 12px; color: #edf3fa; "><?php echo safe_html($row['action']); ?></span></td>
+                        <td style="padding: 10px; color: #edf3fa;"><?php echo safe_html($row['table_affected']); ?></td>
+                        <td style="padding: 10px; color: #edf3fa;"><?php echo safe_html($row['username'] ?? 'Systemadministrator'); ?></td>
+                        <td style="padding: 10px; color: #a8b7c8;"><?php echo date('d/m/Y H:i', strtotime($row['timestamp'])); ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
-        <a href="/admin/audit_log.php" style="display: inline-block; margin-top: 15px; color: #3498db; text-decoration: none; font-weight: 600; font-size: 13px;">Se hele ændringsloggen →</a>
+        <a href="/admin/audit_log.php" style="display: inline-block; margin-top: 15px; color: #7bb5df; text-decoration: none; font-weight: 600; font-size: 13px;">Se hele ændringsloggen →</a>
     <?php else: ?>
-        <p style="color: #7f8c8d; text-align: center; padding: 20px;">Ingen ændringer endnu.</p>
+        <p style="color: #a8b7c8; text-align: center; padding: 20px;">Ingen ændringer endnu.</p>
     <?php endif; ?>
 </div>
 

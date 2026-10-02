@@ -90,18 +90,20 @@ $opening_hours = get_opening_hours();
 
 <style>
     .form-section {
-        background: white;
+        background: rgba(17, 49, 77, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
         padding: 20px;
-        border-radius: 4px;
+        border-radius: 12px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .form-section h3 {
         font-size: 16px;
         margin-bottom: 15px;
-        border-bottom: 2px solid #ecf0f1;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
         padding-bottom: 10px;
+        color: #edf3fa;
     }
 
     .form-group {
@@ -113,7 +115,7 @@ $opening_hours = get_opening_hours();
         font-weight: 600;
         margin-bottom: 5px;
         font-size: 14px;
-        color: #2c3e50;
+        color: #a8b7c8;
     }
 
     input[type="text"],
@@ -123,10 +125,12 @@ $opening_hours = get_opening_hours();
     select {
         width: 100%;
         padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
         font-size: 13px;
         font-family: inherit;
+        background: rgba(5,15,27,0.45);
+        color: #edf3fa;
     }
 
     textarea {
@@ -156,19 +160,20 @@ $opening_hours = get_opening_hours();
     }
 
     button {
-        background: #3498db;
+        background: linear-gradient(135deg, #3C85BA 0%, #002748 100%);
         color: white;
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 14px;
         font-weight: 600;
-        transition: background 0.3s;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     button:hover {
-        background: #2980b9;
+        transform: translateY(-1px);
+        box-shadow: 0 12px 20px rgba(60,133,186,0.2);
     }
 
     .form-group-row {
@@ -191,15 +196,16 @@ $opening_hours = get_opening_hours();
     .wysiwyg-editor {
         min-height: 200px;
         padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background: white;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
+        background: rgba(5,15,27,0.45);
+        color: #edf3fa;
         font-size: 13px;
         line-height: 1.6;
     }
 
     .wysiwyg-editor:focus {
-        outline: 2px solid #3498db;
+        outline: 2px solid #3C85BA;
         outline-offset: 1px;
     }
 </style>

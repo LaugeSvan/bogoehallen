@@ -139,11 +139,12 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
 <style>
     .sponsor-section {
-        background: white;
+        background: rgba(17, 49, 77, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
         padding: 20px;
-        border-radius: 4px;
+        border-radius: 12px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .form-group {
@@ -155,6 +156,7 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         font-weight: 600;
         margin-bottom: 5px;
         font-size: 14px;
+        color: #a8b7c8;
     }
 
     input[type="text"],
@@ -162,9 +164,11 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     input[type="file"] {
         width: 100%;
         padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
         font-size: 13px;
+        background: rgba(5,15,27,0.45);
+        color: #edf3fa;
     }
 
     .form-group-row {
@@ -174,11 +178,11 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     button {
-        background: #3498db;
+        background: linear-gradient(135deg, #3C85BA 0%, #002748 100%);
         color: white;
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
     }
@@ -195,40 +199,43 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     .sponsor-card {
-        background: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        background: rgba(12, 28, 43, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
         padding: 15px;
         display: flex;
         flex-direction: column;
         gap: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .sponsor-logo {
         width: 100%;
         height: 100px;
         object-fit: contain;
-        background: white;
-        border: 1px solid #ecf0f1;
-        border-radius: 3px;
+        background: rgba(5,15,27,0.45);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
     }
 
     .sponsor-name {
         font-weight: 600;
-        color: #2c3e50;
+        color: #edf3fa;
     }
 
     .sponsor-link {
         font-size: 12px;
-        color: #3498db;
+        color: #7bb5df;
         word-break: break-all;
     }
 
     .sponsor-edit-form input {
         width: 100%;
         padding: 7px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 6px;
+        background: rgba(5,15,27,0.45);
+        color: #edf3fa;
     }
 
     .sponsor-edit-form label {
@@ -245,22 +252,22 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         padding: 6px 8px;
         font-size: 12px;
         border: none;
-        border-radius: 3px;
+        border-radius: 6px;
         cursor: pointer;
         color: white;
         text-align: center;
     }
 
     .btn-edit {
-        background: #3498db;
+        background: #3C85BA;
     }
 
     .btn-delete {
-        background: #e74c3c;
+        background: rgba(216, 91, 91, 0.9);
     }
 
     .btn-delete:hover {
-        background: #c0392b;
+        background: rgba(200, 70, 70, 1);
     }
 </style>
 

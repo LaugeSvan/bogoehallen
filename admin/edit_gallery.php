@@ -139,11 +139,12 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
 <style>
     .upload-section {
-        background: white;
+        background: rgba(17, 49, 77, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
         padding: 20px;
-        border-radius: 4px;
+        border-radius: 12px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .form-group {
@@ -155,6 +156,7 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         font-weight: 600;
         margin-bottom: 5px;
         font-size: 14px;
+        color: #a8b7c8;
     }
 
     input[type="text"],
@@ -162,9 +164,11 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     textarea {
         width: 100%;
         padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 8px;
         font-size: 13px;
+        background: rgba(5,15,27,0.45);
+        color: #edf3fa;
     }
 
     .file-input-wrapper {
@@ -177,10 +181,10 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     .file-input-label {
         display: block;
         padding: 10px;
-        background: #3498db;
+        background: linear-gradient(135deg, #3C85BA 0%, #002748 100%);
         color: white;
         cursor: pointer;
-        border-radius: 4px;
+        border-radius: 8px;
         text-align: center;
         font-weight: 600;
     }
@@ -191,11 +195,11 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     button {
-        background: #3498db;
+        background: linear-gradient(135deg, #3C85BA 0%, #002748 100%);
         color: white;
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
     }
@@ -212,10 +216,11 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     .gallery-item {
-        background: white;
-        border-radius: 4px;
+        background: rgba(17, 49, 77, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .gallery-item img {
@@ -231,7 +236,7 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
     .gallery-item-caption {
         font-size: 13px;
-        color: #333;
+        color: #edf3fa;
         margin-bottom: 8px;
         word-break: break-word;
     }
@@ -240,8 +245,10 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         width: 100%;
         padding: 7px;
         margin-bottom: 8px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 6px;
+        background: rgba(5,15,27,0.45);
+        color: #edf3fa;
     }
 
     .gallery-item-actions {
@@ -251,11 +258,11 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
     .delete-btn {
         flex: 1;
-        background: #e74c3c;
+        background: rgba(216, 91, 91, 0.9);
         color: white;
         padding: 5px;
         text-align: center;
-        border-radius: 3px;
+        border-radius: 6px;
         text-decoration: none;
         font-size: 12px;
         cursor: pointer;
@@ -263,7 +270,7 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     .delete-btn:hover {
-        background: #c0392b;
+        background: rgba(200, 70, 70, 1);
     }
 </style>
 

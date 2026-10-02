@@ -50,6 +50,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Bogø Hallen</title>
     <style>
+        :root {
+            --bg: #071a2a;
+            --panel: rgba(13, 34, 55, 0.96);
+            --surface: #102d46;
+            --surface-soft: #15395d;
+            --line: rgba(255, 255, 255, 0.08);
+            --text: #edf3fa;
+            --muted: #a8b7c8;
+            --blue: #3C85BA;
+            --green: #2B7B35;
+            --navy: #002748;
+            --danger: #d85b5b;
+            --success: #2d8a4f;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -58,103 +73,116 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: radial-gradient(circle at top, #0f2d46 0%, var(--bg) 55%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
+            color: var(--text);
         }
 
         .login-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
             width: 100%;
-            max-width: 400px;
-            padding: 40px;
+            max-width: 420px;
+            padding: 32px 28px 24px;
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
         .login-header h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 28px;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
         }
 
         .login-header p {
             font-size: 14px;
-            color: #666;
+            color: var(--muted);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
             margin-bottom: 8px;
+            letter-spacing: 0.02em;
         }
 
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
             font-size: 14px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--text);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="password"]::placeholder {
+            color: var(--muted);
         }
 
         input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: rgba(60, 133, 186, 0.6);
+            box-shadow: 0 0 0 3px rgba(60, 133, 186, 0.14);
         }
 
         .alert {
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 20px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
             font-size: 14px;
+            border: 1px solid transparent;
         }
 
         .alert-danger {
-            background-color: #fee;
-            color: #c33;
-            border: 1px solid #fcc;
+            background: rgba(216, 91, 91, 0.12);
+            color: #ffdfe1;
+            border-color: rgba(216, 91, 91, 0.35);
         }
 
         .alert-success {
-            background-color: #efe;
-            color: #3c3;
-            border: 1px solid #cfc;
+            background: rgba(45, 138, 79, 0.12);
+            color: #d6fbe0;
+            border-color: rgba(45, 138, 79, 0.28);
         }
 
         button {
             width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 13px 16px;
+            font-size: 15px;
+            font-weight: 700;
             color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--blue) 0%, var(--navy) 100%);
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 25px rgba(60, 133, 186, 0.18);
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 27px rgba(60, 133, 186, 0.26);
         }
 
         button:active {
@@ -165,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-align: center;
             margin-top: 20px;
             font-size: 12px;
-            color: #666;
+            color: var(--muted);
         }
     </style>
 </head>
