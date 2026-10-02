@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS audit_log (
 -- Insert default admin user (username: admin, password: admin123)
 -- Password hash for 'admin123' using bcrypt
 INSERT INTO users (username, password, role) VALUES
-('admin', '$2y$10$mOtZ9ZiI3YhYz.i.FPgFAuvVxZeqJcVHj.cKBRKFiZL/BEjRfEg66', 'super_admin');
+('admin', '$2y$10$2dFG5SzHsIAx7KfXdgXlnO.Y/1qfoL7bVjcB0bkFu.qKBIFp0jtXq', 'super_admin');
 
 -- Insert default content
 INSERT INTO content (section, `key`, value) VALUES
