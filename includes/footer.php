@@ -28,6 +28,7 @@ $facebook_url = safe_navigation_url(get_content('footer', 'facebook_url', ''), '
                     <li><a href="<?php echo safe_html($bylaws_url); ?>">Vedtægt</a></li>
                     <li><a href="<?php echo safe_html($contact_url); ?>">Kontakt os</a></li>
                     <li><a href="<?php echo safe_html($sponsor_url); ?>">Bliv sponsor</a></li>
+                    <li><a href="/admin/login.php">Admin</a></li>
                     <li><a href="https://www.google.com/maps/search/?api=1&amp;query=<?php echo safe_html($encoded_map_query); ?>" target="_blank" rel="noopener noreferrer">Google Maps</a></li>
                     <?php if ($facebook_url): ?>
                         <li><a href="<?php echo safe_html($facebook_url); ?>" target="_blank" rel="noopener noreferrer">Facebook</a></li>
