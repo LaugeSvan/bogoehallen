@@ -344,7 +344,7 @@ $opening_hours = get_opening_hours();
 
     <!-- Footer Section -->
     <div class="form-section">
-        <h3>Sideninformationer</h3>
+        <h3>Sideinformationer</h3>
 
         <div class="form-group">
             <label for="footer_address">Adresse</label>
