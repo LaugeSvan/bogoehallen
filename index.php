@@ -36,8 +36,38 @@ if ($hours_result) {
 
 <?php require_once __DIR__ . '/includes/header.php'; ?>
 
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">Bogø Hallen</p>
+        <h1><?php echo safe_html($about_title); ?></h1>
+        <p class="hero-text"><?php echo safe_html(strip_tags($about_text)); ?></p>
+        <div class="cta-row">
+            <a class="button primary" href="#aabningstider">Se åbningstider</a>
+            <a class="button secondary" href="/kontakt.php">Kontakt os</a>
+        </div>
+    </div>
+
+    <div class="hero-panel">
+        <div class="hero-panel-card">
+            <h3>Åbningstider</h3>
+            <ul>
+                <?php
+                $hero_days = ['monday' => 'Mandag', 'tuesday' => 'Tirsdag', 'wednesday' => 'Onsdag', 'thursday' => 'Torsdag', 'friday' => 'Fredag', 'saturday' => 'Lørdag', 'sunday' => 'Søndag'];
+                foreach ($hero_days as $day_key => $day_name):
+                    $time = $opening_hours[$day_key] ?? 'Lukket';
+                    echo '<li><span>' . safe_html($day_name) . '</span><strong>' . safe_html($time) . '</strong></li>';
+                endforeach;
+                ?>
+            </ul>
+        </div>
+    </div>
+</section>
+
 <!-- Gallery Section -->
 <section class="section">
+    <div class="gallery-header">
+        <h2 class="section-title">Galleri</h2>
+    </div>
     <div class="gallery">
         <?php foreach ($gallery as $item): ?>
             <?php $image_url = normalize_upload_url($item['image_path'] ?? ''); ?>
@@ -50,7 +80,7 @@ if ($hours_result) {
 </section>
 
 <!-- About and Opening Hours Section -->
-<section class="section">
+<section class="section" id="aabningstider">
     <h2 class="section-title"><?php echo safe_html($about_title); ?></h2>
 
     <div class="two-column">
