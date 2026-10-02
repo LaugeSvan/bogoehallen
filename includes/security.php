@@ -64,11 +64,12 @@ function normalize_upload_url($path) {
     if (preg_match('#^https?://#i', $path)) {
         return $path;
     }
-    if (str_starts_with($path, '/admin/uploads/')) {
+    if (strpos($path, '/admin/uploads/') === 0) {
         return $path;
     }
-    if (preg_match('#^/(?:var|home|srv|www|Users)/#', $path) || preg_match('#^[A-Za-z]:\\#', $path)) {
-        return UPLOADS_PUBLIC_PATH . '/' . basename($path);
+    $portable_path = str_replace('\\', '/', $path);
+    if (preg_match('#^/(?:var|home|srv|www|Users)/#', $portable_path) || preg_match('#^[A-Za-z]:/#', $portable_path)) {
+        return UPLOADS_PUBLIC_PATH . '/' . basename($portable_path);
     }
 
     return $path;
@@ -79,6 +80,34 @@ function normalize_upload_url($path) {
  */
 function safe_html($text) {
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+}
+
+function safe_navigation_url($url, $fallback) {
+    $url = preg_replace('/[\x00-\x1F\x7F]/', '', trim((string)$url));
+    if (strpos($url, '/') === 0 && strpos($url, '//') !== 0) {
+        return $url;
+    }
+
+    $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+    if (in_array($scheme, ['http', 'https'], true) && filter_var($url, FILTER_VALIDATE_URL)) {
+        return $url;
+    }
+
+    return $fallback;
+}
+
+/**
+ * Keep a small set of formatting tags for administrator-authored rich text.
+ */
+function sanitize_rich_text($html) {
+    $allowed_tags = '<p><br><strong><b><em><i><u><ul><ol><li><h2><h3><blockquote>';
+    $html = strip_tags((string)$html, $allowed_tags);
+
+    return preg_replace(
+        '/<(\/?)((?:p|br|strong|b|em|i|u|ul|ol|li|h2|h3|blockquote))\b[^>]*>/i',
+        '<$1$2>',
+        $html
+    );
 }
 
 /**
@@ -138,16 +167,25 @@ function validate_email($email) {
  */
 function validate_file_upload($file, $allowed_types = ALLOWED_IMAGE_TYPES, $max_size = MAX_UPLOAD_SIZE) {
     if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
-        return ['success' => false, 'error' => 'File upload error'];
+        return ['success' => false, 'error' => 'Filen kunne ikke uploades.'];
     }
 
     if ($file['size'] > $max_size) {
-        return ['success' => false, 'error' => 'File size exceeds limit'];
+        return ['success' => false, 'error' => 'Filen er større end den tilladte grænse.'];
     }
 
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($ext, $allowed_types)) {
-        return ['success' => false, 'error' => 'File type not allowed'];
+        return ['success' => false, 'error' => 'Denne filtype er ikke tilladt.'];
+    }
+
+    if ($ext === 'svg') {
+        $contents = @file_get_contents($file['tmp_name']);
+        if ($contents === false || stripos($contents, '<svg') === false) {
+            return ['success' => false, 'error' => 'SVG-filen er ikke et gyldigt billede.'];
+        }
+    } elseif (function_exists('getimagesize') && !@getimagesize($file['tmp_name'])) {
+            return ['success' => false, 'error' => 'Filen er ikke et gyldigt billede.'];
     }
 
     return ['success' => true];

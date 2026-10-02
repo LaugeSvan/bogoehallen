@@ -8,6 +8,13 @@ require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/security.php'; 
 
 $page_title = 'Kontakt';
+$contact_labels = [
+    'name' => get_content('contact_form', 'name_label', 'Navn'),
+    'email' => get_content('contact_form', 'email_label', 'Email'),
+    'subject' => get_content('contact_form', 'subject_label', 'Emne'),
+    'message' => get_content('contact_form', 'message_label', 'Besked'),
+    'submit' => get_content('contact_form', 'submit_label', 'Send besked'),
+];
 
 $db = get_db_connection();
 $success = '';
@@ -45,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
                     $email_message = "Navn: $name\nEmail: $email\n\nBesked:\n$message";
                     $headers = "From: $email\r\nReply-To: $email";
 
-                    @mail($to, $email_subject, $email_message, $headers);
+                    if (validate_email($to)) {
+                        @mail($to, $email_subject, $email_message, $headers);
+                    }
 
                     $success = 'Tak for din henvendelse! Vi vender tilbage til dig snart.';
                     $name = $email = $subject = $message = '';
@@ -84,28 +93,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
 
             <form method="POST" class="contact-form">
                 <div class="form-group">
-                    <label for="name">Navn *</label>
+                    <label for="name"><?php echo safe_html($contact_labels['name']); ?> *</label>
                     <input type="text" id="name" name="name" value="<?php echo safe_html($name ?? ''); ?>" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email *</label>
+                    <label for="email"><?php echo safe_html($contact_labels['email']); ?> *</label>
                     <input type="email" id="email" name="email" value="<?php echo safe_html($email ?? ''); ?>" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="subject">Emne *</label>
+                    <label for="subject"><?php echo safe_html($contact_labels['subject']); ?> *</label>
                     <input type="text" id="subject" name="subject" value="<?php echo safe_html($subject ?? ''); ?>" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="message">Besked *</label>
+                    <label for="message"><?php echo safe_html($contact_labels['message']); ?> *</label>
                     <textarea id="message" name="message" required><?php echo safe_html($message ?? ''); ?></textarea>
                 </div>
 
                 <?php echo csrf_input(); ?>
 
-                <button type="submit">Send besked</button>
+                <button type="submit"><?php echo safe_html($contact_labels['submit']); ?></button>
             </form>
         </div>
 

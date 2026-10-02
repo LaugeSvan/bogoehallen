@@ -21,13 +21,13 @@ $success = '';
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
-        $error = 'CSRF token validation failed';
+        $error = 'Sikkerhedstjekket mislykkedes. Prøv igen.';
     } else {
         $username = sanitize_input($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
 
         if (empty($username) || empty($password)) {
-            $error = 'Please enter both username and password';
+            $error = 'Indtast både brugernavn og adgangskode.';
         } else {
             $auth = authenticate_user($username, $password);
 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Bogø Hallen</title>
+    <title>Admin - Bogø Hallen</title>
     <style>
         * {
             margin: 0;
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="login-header">
             <h1>Bogø Hallen</h1>
-            <p>Admin Panel Login</p>
+            <p>Log ind på administrationspanelet</p>
         </div>
 
         <?php if ($error): ?>

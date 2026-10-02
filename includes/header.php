@@ -11,6 +11,13 @@ init_session();
 
 // Get header content
 $site_title = get_content('header', 'site_title', 'Bogø Hallen');
+$site_logo = normalize_upload_url(get_content('header', 'logo', ''));
+$navigation = [
+    ['label' => get_content('header', 'nav_home_label', 'Forside'), 'url' => safe_navigation_url(get_content('header', 'nav_home_url', '/'), '/'), 'page' => 'index.php'],
+    ['label' => get_content('header', 'nav_board_label', 'Bestyrelsen'), 'url' => safe_navigation_url(get_content('header', 'nav_board_url', '/bestyrelsen.php'), '/bestyrelsen.php'), 'page' => 'bestyrelsen.php'],
+    ['label' => get_content('header', 'nav_about_label', 'Om os'), 'url' => safe_navigation_url(get_content('header', 'nav_about_url', '/om-os.php'), '/om-os.php'), 'page' => 'om-os.php'],
+    ['label' => get_content('header', 'nav_contact_label', 'Kontakt'), 'url' => safe_navigation_url(get_content('header', 'nav_contact_url', '/kontakt.php'), '/kontakt.php'), 'page' => 'kontakt.php'],
+];
 ?>
 <!DOCTYPE html>
 <html lang="da">
@@ -25,14 +32,19 @@ $site_title = get_content('header', 'site_title', 'Bogø Hallen');
     <header class="site-header">
         <div class="header-content">
             <div class="logo">
-                <h1><?php echo safe_html($site_title); ?></h1>
+                <?php if ($site_logo): ?>
+                    <a href="/" aria-label="<?php echo safe_html($site_title); ?> - Forside">
+                        <img src="<?php echo safe_html($site_logo); ?>" alt="<?php echo safe_html($site_title); ?>">
+                    </a>
+                <?php else: ?>
+                    <h1><?php echo safe_html($site_title); ?></h1>
+                <?php endif; ?>
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="/" class="<?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : ''; ?>">Forside</a></li>
-                    <li><a href="/om-os.php" class="<?php echo basename($_SERVER['PHP_SELF']) === 'om-os.php' ? 'active' : ''; ?>">Om os</a></li>
-                    <li><a href="/kontakt.php" class="<?php echo basename($_SERVER['PHP_SELF']) === 'kontakt.php' ? 'active' : ''; ?>">Kontakt</a></li>
-                    <li><a href="/bliv-sponsor.php" class="<?php echo basename($_SERVER['PHP_SELF']) === 'bliv-sponsor.php' ? 'active' : ''; ?>">Bliv sponsor</a></li>
+                    <?php foreach ($navigation as $item): ?>
+                        <li><a href="<?php echo safe_html($item['url']); ?>" class="<?php echo basename($_SERVER['PHP_SELF']) === $item['page'] ? 'active' : ''; ?>"><?php echo safe_html($item['label']); ?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </nav>
         </div>

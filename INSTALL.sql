@@ -79,13 +79,31 @@ INSERT INTO users (username, password, role) VALUES
 INSERT INTO content (section, `key`, value) VALUES
 ('header', 'logo_alt', 'Bogø Hallen Logo'),
 ('header', 'site_title', 'Bogø Hallen'),
+('header', 'nav_home_label', 'Forside'),
+('header', 'nav_home_url', '/'),
+('header', 'nav_board_label', 'Bestyrelsen'),
+('header', 'nav_board_url', '/bestyrelsen.php'),
+('header', 'nav_about_label', 'Om os'),
+('header', 'nav_about_url', '/om-os.php'),
+('header', 'nav_contact_label', 'Kontakt'),
+('header', 'nav_contact_url', '/kontakt.php'),
 ('main', 'about_title', 'Velkommen til Bogø Hallen'),
 ('main', 'about_text', 'Bogø Hallen er Danmarks moderne og bedst udstyret idrætscenter. Vi tilbyder faciliteter til alle typer sport og aktiviteter.'),
+('board', 'title', 'Bestyrelsen'),
+('board', 'text', 'Bestyrelsen varetager Bogø Hallens daglige drift og udvikling. Kontakt os gerne via kontaktsiden.'),
+('contact_form', 'name_label', 'Navn'),
+('contact_form', 'email_label', 'Email'),
+('contact_form', 'subject_label', 'Emne'),
+('contact_form', 'message_label', 'Besked'),
+('contact_form', 'submit_label', 'Send besked'),
 ('footer', 'address', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod'),
 ('footer', 'cvr', 'CVR: 12345678'),
 ('footer', 'contact_email', 'kontakt@bogohallen.dk'),
 ('footer', 'facebook_url', 'https://facebook.com/bogohallen'),
-('footer', 'google_maps_embed', '<iframe src="https://www.google.com/maps/embed?pb=..." width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>');
+('footer', 'contact_url', '/kontakt.php'),
+('footer', 'bylaws_url', '/vedtaegt.php'),
+('footer', 'sponsor_url', '/bliv-sponsor.php'),
+('footer', 'google_maps_query', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod');
 
 -- Insert opening hours
 INSERT INTO content (section, `key`, value) VALUES

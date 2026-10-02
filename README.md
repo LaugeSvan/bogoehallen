@@ -7,8 +7,10 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 ### Frontend
 - **Responsive Design**: Mobile-first responsive layout using CSS Grid/Flexbox
 - **Dynamic Content**: Homepage displays gallery, about text, opening hours, and sponsors from database
+- **Google Maps**: Footer map and link use an editable location
 - **Public Pages**:
   - Forside (Homepage)
+   - Bestyrelsen (Board)
   - Om os (About)
   - Kontakt (Contact form with email submission)
   - Vedtægt (Constitution/Bylaws)
@@ -17,7 +19,8 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 ### Admin Panel
 - **Secure Authentication**: Session-based login with bcrypt password hashing
 - **Content Management**:
-  - Edit main content blocks (about text, opening hours)
+   - Edit main and board text, navigation links, logo, footer, and opening hours
+   - Format main text with the built-in rich-text toolbar
   - Manage gallery images with auto-resize
   - Manage sponsor logos and links
 - **Audit Log**: Track all changes with user, timestamp, and action details
@@ -45,31 +48,12 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 2. Upload via FTP to your Simply.com hosting (typically to `public_html/`)
 3. Ensure `.htaccess` file is uploaded (may be hidden)
 
-### Step 2: Setup Encrypted Database Credentials
+### Step 2: Configure Database Credentials
 
-⚠️ **Database credentials are now encrypted for security!**
-
-1. Upload all files to Simply.com (including `/config/` directory)
-
-2. Navigate to setup script:
-   ```
-   https://yoursite.dk/config/setup-credentials.php
-   ```
-
-3. Enter your Simply.com database details:
-   - Database Host (e.g., `mysql.simply.com`)
-   - Database User
-   - Database Password
-   - Database Name
-   - Choose a strong Master Password (12+ characters)
-
-4. Click "Encrypt & Save Credentials"
-
-5. **DELETE** `/config/setup-credentials.php` immediately
-
-6. Save your master password in a secure location (password manager)
-
-📖 **Full instructions:** See `SECURE-SETUP.md`
+1. Copy `config.example.php` to `config.php`.
+2. Edit `config.php` with the host, database name, username, and password supplied by Simply.com.
+3. Upload `config.php` to the site root over SFTP. The file is excluded from Git and automated deployment.
+4. Never commit or expose `config.php` through a public URL.
 
 ### Step 3: Create Database Schema
 
@@ -83,19 +67,14 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 ### Step 4: Set Permissions
 1. Set `/admin/uploads/` folder permissions to 755:
    ```bash
+   mkdir -p admin/uploads
    chmod 755 admin/uploads
    ```
 
-2. Ensure `/logs/` directory is writable:
+2. Ensure PHP can write to `/logs/` (the app creates the directory when needed):
    ```bash
-   chmod 755 logs
    mkdir -p logs
-   ```
-
-3. Ensure encryption key file is secure:
-   ```bash
-   chmod 0600 config/.encryption-key
-   chmod 0600 config/credentials.enc
+   chmod 755 logs
    ```
 
 ### Step 5: Access Admin Panel
@@ -111,21 +90,19 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 Overview of system statistics and recent changes.
 
 ### Edit Content (`/admin/edit_content.php`)
-- Update main about text and title
-- Edit footer information (address, CVR, contact email)
+- Update main text, board page content, logo, navigation, and contact form labels
+- Edit footer information, links, Maps location, CVR, and contact email
 - Manage opening hours for each day
 
 ### Gallery Manager (`/admin/edit_gallery.php`)
 - Upload gallery images (JPG, PNG, SVG supported)
-- Add captions to images
+- Add or edit captions and display order
 - Delete images
-- Reorder gallery items
 
 ### Sponsor Manager (`/admin/edit_sponsors.php`)
 - Add new sponsors with logo and link
-- Edit sponsor information
+- Edit sponsor name, logo, link, and display order
 - Delete sponsors
-- Manage sponsor order
 
 ### Audit Log (`/admin/audit_log.php`)
 - View all changes made in the system
@@ -136,7 +113,8 @@ Overview of system statistics and recent changes.
 
 ```
 /bogo-hallen/
-├── config.php              # Database configuration (EDIT THIS)
+├── config.example.php      # Safe database configuration template
+├── config.php              # Private database credentials (not committed)
 ├── INSTALL.sql             # Database schema
 ├── sample-data.sql         # Optional sample data
 ├── README.md               # This file
@@ -163,7 +141,6 @@ Overview of system statistics and recent changes.
 ├── /includes/
 │   ├── header.php          # Frontend header template
 │   ├── footer.php          # Frontend footer template
-│   ├── nav.php             # Navigation menu
 │   └── security.php        # Security utilities
 │
 ├── /css/
@@ -177,6 +154,7 @@ Overview of system statistics and recent changes.
 │
 ├── Public Pages:
 │   ├── index.php           # Homepage
+│   ├── bestyrelsen.php     # Board page
 │   ├── om-os.php           # About page
 │   ├── kontakt.php         # Contact page
 │   ├── vedtaegt.php        # Constitution page
@@ -246,36 +224,14 @@ Overview of system statistics and recent changes.
 
 ⚠️ **You Should Do**:
 1. **Change default admin password** immediately after installation
-2. **Update `SALT` constant** in `config.php` with a random string
-3. **Set proper file permissions**: `chmod 644` for PHP files, `chmod 755` for directories
-4. **Enable HTTPS** (SSL certificate)
-5. **Keep PHP updated** to the latest secure version
-6. **Monitor `/logs/errors.log`** regularly for issues
+2. **Set proper file permissions**: `chmod 644` for PHP files and `chmod 755` for directories
+3. **Enable HTTPS** (SSL certificate)
+4. **Keep PHP updated** to the latest secure version
+5. **Monitor `/logs/errors.log`** regularly for issues
 
-## Encrypted Credentials System
+## Configuration Security
 
-**Your database credentials are encrypted** for maximum security:
-
-- 🔐 **AES-256-CBC encryption** (military-grade)
-- 🔑 **Master password protection** (user-provided)
-- 📁 **Separate `/config/` directory** (inaccessible from web)
-- 🛡️ **0600 file permissions** (PHP-only read access)
-
-### Files Created by Setup
-
-- `/config/credentials.enc` - Encrypted database credentials
-- `/config/.encryption-key` - Encryption key (0600 permissions)
-- `config.php` - Updated to load encrypted credentials
-
-### Security Features
-
-✅ Credentials never stored in plain text
-✅ Encryption key separate from encrypted data
-✅ Master password never stored (only hash)
-✅ Random IV for each encryption
-✅ Web server cannot access encryption files
-
-📖 **Full documentation:** See `SECURE-SETUP.md`
+Database credentials are stored in the ignored root `config.php`, not in source control. Deploy it separately over SFTP, restrict file access where the hosting plan permits, and never expose credentials through a public setup form. PHP errors are written to `/logs/errors.log` when the host permits it.
 
 ## Customization
 
@@ -303,7 +259,7 @@ Edit `INSTALL.sql` before importing, or update through admin panel
 **Problem:** Cannot connect to database
 
 **Solutions:**
-1. Check that `/config/credentials.enc` and `/config/.encryption-key` both exist
+1. Check that the root `config.php` exists and contains the correct database settings
 2. Verify database credentials are correct (test in phpMyAdmin)
 3. Verify database name, user, and host are correct
 4. Check PHP error logs: `/logs/errors.log`
@@ -363,7 +319,7 @@ If emails aren't arriving:
 
 For issues:
 1. Check `/logs/errors.log` for PHP errors
-2. Review `SECURE-SETUP.md` for credential/encryption issues
+2. Review `config.example.php` and the database setup steps above
 3. Review troubleshooting section below
 4. Contact hosting support (for hosting-level issues)
 

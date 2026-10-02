@@ -55,7 +55,7 @@ if ($hours_result) {
 
     <div class="two-column">
         <div class="two-column-content">
-            <?php echo nl2br(safe_html($about_text)); ?>
+            <?php echo sanitize_rich_text($about_text); ?>
         </div>
 
         <div>
@@ -96,7 +96,7 @@ if ($hours_result) {
             <?php foreach ($sponsors as $sponsor): ?>
                 <div class="sponsor-item">
                     <?php if ($sponsor['link']): ?>
-                        <a href="<?php echo safe_html($sponsor['link']); ?>" target="_blank" title="<?php echo safe_html($sponsor['name']); ?>">
+                        <a href="<?php echo safe_html(safe_navigation_url($sponsor['link'], '#')); ?>" target="_blank" rel="noopener noreferrer" title="<?php echo safe_html($sponsor['name']); ?>">
                             <img src="<?php echo safe_html($sponsor['logo']); ?>" alt="<?php echo safe_html($sponsor['name']); ?>">
                         </a>
                     <?php else: ?>

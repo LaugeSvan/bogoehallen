@@ -48,6 +48,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
 }
 
 // Handle image deletion
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_image'])) {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        $error = 'CSRF-validering mislykkedes';
+    } else {
+        $id = (int)($_POST['image_id'] ?? 0);
+        $caption = sanitize_input($_POST['caption'] ?? '');
+        $sort_order = (int)($_POST['sort_order'] ?? 0);
+        $old_stmt = $db->prepare('SELECT caption, sort_order FROM gallery_images WHERE id = ?');
+        if ($old_stmt) {
+            $old_stmt->bind_param('i', $id);
+            $old_stmt->execute();
+            $old_result = $old_stmt->get_result();
+            $old_image = $old_result->fetch_assoc();
+            $old_stmt->close();
+
+            $update_stmt = $db->prepare('UPDATE gallery_images SET caption = ?, sort_order = ? WHERE id = ?');
+            if ($old_image && $update_stmt) {
+                $update_stmt->bind_param('sii', $caption, $sort_order, $id);
+                if ($update_stmt->execute()) {
+                    log_audit(get_current_user_id(), 'updated_image', 'gallery_images', $id, $old_image, ['caption' => $caption, 'sort_order' => $sort_order]);
+                    $success = 'Billedet blev opdateret.';
+                } else {
+                    $error = 'Billedet kunne ikke opdateres.';
+                }
+                $update_stmt->close();
+            } else {
+                $error = 'Billedet blev ikke fundet.';
+            }
+        }
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_image'])) {
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
         $error = 'CSRF-validering mislykkedes';
@@ -68,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_image'])) {
                     $delete_stmt->bind_param('i', $id);
                     if ($delete_stmt->execute() && $delete_stmt->affected_rows > 0) {
                         $image_url = normalize_upload_url($row['image_path']);
-                        if (str_starts_with($image_url, UPLOADS_PUBLIC_PATH . '/')) {
+                        if (strpos($image_url, UPLOADS_PUBLIC_PATH . '/') === 0) {
                             $filename = basename(parse_url($image_url, PHP_URL_PATH));
                             delete_image(UPLOADS_DIR . '/' . $filename);
                         }
@@ -86,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_image'])) {
 }
 
 // Get gallery images
-$result = $db->query("SELECT id, image_path, caption FROM gallery_images ORDER BY sort_order ASC");
+$result = $db->query("SELECT id, image_path, caption, sort_order FROM gallery_images ORDER BY sort_order ASC");
 $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
 ?>
@@ -204,6 +236,14 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         word-break: break-word;
     }
 
+    .gallery-edit-form input {
+        width: 100%;
+        padding: 7px;
+        margin-bottom: 8px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+    }
+
     .gallery-item-actions {
         display: flex;
         gap: 5px;
@@ -233,10 +273,10 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
     <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="image">Vælg billede (JPG, PNG)</label>
+            <label for="image">Vælg billede (JPG, PNG, SVG)</label>
             <div class="file-input-wrapper">
                 <label for="image" class="file-input-label">Vælg fil...</label>
-                <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png" required>
+                <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.svg" required>
             </div>
         </div>
 
@@ -262,7 +302,16 @@ $images = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                 <div class="gallery-item">
                     <img src="<?php echo safe_html($image_url); ?>" alt="<?php echo safe_html($image['caption']); ?>">
                     <div class="gallery-item-info">
-                        <div class="gallery-item-caption"><?php echo safe_html($image['caption'] ?: 'Uden tekst'); ?></div>
+                        <form method="POST" class="gallery-edit-form">
+                            <input type="hidden" name="update_image" value="1">
+                            <input type="hidden" name="image_id" value="<?php echo (int)$image['id']; ?>">
+                            <label for="caption_<?php echo (int)$image['id']; ?>">Billedtekst</label>
+                            <input type="text" id="caption_<?php echo (int)$image['id']; ?>" name="caption" value="<?php echo safe_html($image['caption']); ?>" maxlength="100">
+                            <label for="sort_<?php echo (int)$image['id']; ?>">Rækkefølge</label>
+                            <input type="number" id="sort_<?php echo (int)$image['id']; ?>" name="sort_order" value="<?php echo (int)$image['sort_order']; ?>">
+                            <?php echo csrf_input(); ?>
+                            <button type="submit">Gem</button>
+                        </form>
                         <div class="gallery-item-actions">
                             <form method="POST" onsubmit="return confirm('Slet dette billede?');">
                                 <input type="hidden" name="delete_image" value="1">

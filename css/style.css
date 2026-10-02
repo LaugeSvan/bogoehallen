@@ -62,6 +62,13 @@ a:hover {
     color: var(--text-color);
 }
 
+.logo img {
+    display: block;
+    max-width: 240px;
+    max-height: 76px;
+    object-fit: contain;
+}
+
 .main-nav ul {
     display: flex;
     list-style: none;
@@ -372,6 +379,14 @@ button:active {
 
 .footer-section ul li {
     margin-bottom: 8px;
+}
+
+.footer-map iframe {
+    display: block;
+    width: 100%;
+    min-height: 200px;
+    aspect-ratio: 16 / 9;
+    border: 0;
 }
 
 .footer-bottom {

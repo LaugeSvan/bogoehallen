@@ -74,7 +74,7 @@ function authenticate_user($username, $password) {
     $stmt = $db->prepare('SELECT id, username, password, role FROM users WHERE username = ? LIMIT 1');
     if (!$stmt) {
         error_log('Database error: ' . $db->error);
-        return ['success' => false, 'error' => 'Database error'];
+        return ['success' => false, 'error' => 'Der opstod en databasefejl.'];
     }
 
     $stmt->bind_param('s', $username);
@@ -83,14 +83,14 @@ function authenticate_user($username, $password) {
 
     if ($result->num_rows !== 1) {
         $stmt->close();
-        return ['success' => false, 'error' => 'Invalid credentials'];
+        return ['success' => false, 'error' => 'Forkert brugernavn eller adgangskode.'];
     }
 
     $user = $result->fetch_assoc();
     $stmt->close();
 
     if (!verify_password($password, $user['password'])) {
-        return ['success' => false, 'error' => 'Invalid credentials'];
+        return ['success' => false, 'error' => 'Forkert brugernavn eller adgangskode.'];
     }
 
     return ['success' => true, 'user' => $user];

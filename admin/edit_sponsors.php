@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $error = 'CSRF-validering mislykkedes';
     } elseif ($_POST['action'] === 'add' && isset($_FILES['logo'])) {
         $name = sanitize_input($_POST['name'] ?? '');
-        $link = sanitize_input($_POST['link'] ?? '');
+        $link = safe_navigation_url($_POST['link'] ?? '', '');
 
         if (empty($name)) {
             $error = 'Sponsornavn er påkrævet';
@@ -52,16 +52,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     } elseif ($_POST['action'] === 'edit' && isset($_POST['sponsor_id'])) {
         $sponsor_id = (int)$_POST['sponsor_id'];
         $name = sanitize_input($_POST['name'] ?? '');
-        $link = sanitize_input($_POST['link'] ?? '');
+        $link = safe_navigation_url($_POST['link'] ?? '', '');
+        $sort_order = (int)($_POST['sort_order'] ?? 0);
+        $old_stmt = $db->prepare('SELECT name, logo, link, sort_order FROM sponsors WHERE id = ?');
+        if ($old_stmt) {
+            $old_stmt->bind_param('i', $sponsor_id);
+            $old_stmt->execute();
+            $old_result = $old_stmt->get_result();
+            $old_sponsor = $old_result->fetch_assoc();
+            $old_stmt->close();
 
-        $stmt = $db->prepare('UPDATE sponsors SET name = ?, link = ? WHERE id = ?');
-        if ($stmt) {
-            $stmt->bind_param('ssi', $name, $link, $sponsor_id);
-            if ($stmt->execute()) {
-                log_audit(get_current_user_id(), 'updated_sponsor', 'sponsors', $sponsor_id, ['name' => 'old'], ['name' => $name]);
-                $success = 'Sponsor opdateret succesfuldt!';
+            $logo = $old_sponsor['logo'] ?? '';
+            $new_upload = null;
+            if (isset($_FILES['logo']) && $_FILES['logo']['error'] !== UPLOAD_ERR_NO_FILE) {
+                $new_upload = handle_image_upload($_FILES['logo'], UPLOADS_DIR, 200, 200);
+                if (!$new_upload['success']) {
+                    $error = $new_upload['error'];
+                } else {
+                    $logo = $new_upload['url'];
+                }
             }
-            $stmt->close();
+
+            if ($old_sponsor && $name !== '' && $error === '') {
+                $stmt = $db->prepare('UPDATE sponsors SET name = ?, logo = ?, link = ?, sort_order = ? WHERE id = ?');
+                if ($stmt) {
+                    $stmt->bind_param('sssii', $name, $logo, $link, $sort_order, $sponsor_id);
+                    if ($stmt->execute()) {
+                        log_audit(get_current_user_id(), 'updated_sponsor', 'sponsors', $sponsor_id, $old_sponsor, ['name' => $name, 'logo' => $logo, 'link' => $link, 'sort_order' => $sort_order]);
+                        $success = 'Sponsor opdateret succesfuldt!';
+                        if ($new_upload && strpos($old_sponsor['logo'], UPLOADS_PUBLIC_PATH . '/') === 0) {
+                            delete_image(UPLOADS_DIR . '/' . basename(parse_url($old_sponsor['logo'], PHP_URL_PATH)));
+                        }
+                    } else {
+                        $error = 'Sponsor kunne ikke opdateres.';
+                    }
+                    $stmt->close();
+                }
+            } elseif ($old_sponsor && $name === '') {
+                $error = 'Sponsornavn er påkrævet.';
+            } elseif (!$old_sponsor) {
+                $error = 'Sponsoren blev ikke fundet.';
+            }
         }
     } elseif ($_POST['action'] === 'delete' && isset($_POST['sponsor_id'])) {
         $sponsor_id = (int)$_POST['sponsor_id'];
@@ -74,7 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                delete_image(__DIR__ . '/..' . $row['logo']);
+                if (strpos($row['logo'], UPLOADS_PUBLIC_PATH . '/') === 0) {
+                    delete_image(UPLOADS_DIR . '/' . basename(parse_url($row['logo'], PHP_URL_PATH)));
+                }
 
                 $stmt = $db->prepare('DELETE FROM sponsors WHERE id = ?');
                 $stmt->bind_param('i', $sponsor_id);
@@ -191,6 +224,17 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         word-break: break-all;
     }
 
+    .sponsor-edit-form input {
+        width: 100%;
+        padding: 7px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+    }
+
+    .sponsor-edit-form label {
+        margin-top: 8px;
+    }
+
     .sponsor-actions {
         display: flex;
         gap: 5px;
@@ -238,8 +282,8 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         </div>
 
         <div class="form-group">
-            <label for="sponsor_logo">Logo (JPG, PNG)</label>
-            <input type="file" id="sponsor_logo" name="logo" accept=".jpg,.jpeg,.png" required>
+                <label for="sponsor_logo">Logo (JPG, PNG, SVG)</label>
+                <input type="file" id="sponsor_logo" name="logo" accept=".jpg,.jpeg,.png,.svg" required>
         </div>
 
         <input type="hidden" name="action" value="add">
@@ -258,10 +302,20 @@ $sponsors = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
             <?php foreach ($sponsors as $sponsor): ?>
                 <div class="sponsor-card">
                     <img src="<?php echo safe_html($sponsor['logo']); ?>" alt="<?php echo safe_html($sponsor['name']); ?>" class="sponsor-logo">
-                    <div class="sponsor-name"><?php echo safe_html($sponsor['name']); ?></div>
-                    <?php if ($sponsor['link']): ?>
-                        <div class="sponsor-link"><a href="<?php echo safe_html($sponsor['link']); ?>" target="_blank"><?php echo safe_html($sponsor['link']); ?></a></div>
-                    <?php endif; ?>
+                    <form method="POST" enctype="multipart/form-data" class="sponsor-edit-form">
+                        <input type="hidden" name="action" value="edit">
+                        <input type="hidden" name="sponsor_id" value="<?php echo (int)$sponsor['id']; ?>">
+                        <label for="sponsor_name_<?php echo (int)$sponsor['id']; ?>">Navn</label>
+                        <input type="text" id="sponsor_name_<?php echo (int)$sponsor['id']; ?>" name="name" value="<?php echo safe_html($sponsor['name']); ?>" required>
+                        <label for="sponsor_link_<?php echo (int)$sponsor['id']; ?>">Link</label>
+                        <input type="url" id="sponsor_link_<?php echo (int)$sponsor['id']; ?>" name="link" value="<?php echo safe_html($sponsor['link']); ?>">
+                        <label for="sponsor_order_<?php echo (int)$sponsor['id']; ?>">Rækkefølge</label>
+                        <input type="number" id="sponsor_order_<?php echo (int)$sponsor['id']; ?>" name="sort_order" value="<?php echo (int)$sponsor['sort_order']; ?>">
+                        <label for="sponsor_logo_<?php echo (int)$sponsor['id']; ?>">Skift logo</label>
+                        <input type="file" id="sponsor_logo_<?php echo (int)$sponsor['id']; ?>" name="logo" accept=".jpg,.jpeg,.png,.svg">
+                        <?php echo csrf_input(); ?>
+                        <button type="submit" class="btn-small btn-edit">Gem ændringer</button>
+                    </form>
                     <div class="sponsor-actions">
                         <form method="POST" style="flex: 1;">
                             <input type="hidden" name="action" value="delete">

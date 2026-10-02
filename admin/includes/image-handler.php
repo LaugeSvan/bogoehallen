@@ -32,14 +32,20 @@ function handle_image_upload($file, $destination_dir = null, $resize_width = nul
 
     // Move uploaded file
     if (!move_uploaded_file($file['tmp_name'], $filepath)) {
-        return ['success' => false, 'error' => 'Failed to save file'];
+        return ['success' => false, 'error' => 'Filen kunne ikke gemmes.'];
+    }
+
+    $extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
+    if ($extension === 'svg' && !sanitize_svg_upload($filepath)) {
+        unlink($filepath);
+        return ['success' => false, 'error' => 'SVG-filen indeholder ugyldigt eller usikkert indhold'];
     }
 
     // Set permissions
     chmod($filepath, 0644);
 
     // Resize if dimensions provided
-    if ($resize_width && $resize_height) {
+    if ($resize_width && $resize_height && $extension !== 'svg') {
         $result = resize_image($filepath, $resize_width, $resize_height);
         if (!$result['success']) {
             unlink($filepath);
@@ -56,15 +62,78 @@ function handle_image_upload($file, $destination_dir = null, $resize_width = nul
 }
 
 /**
+ * Remove executable and externally-referenced content from uploaded SVG files.
+ */
+function sanitize_svg_upload($filepath) {
+    if (!class_exists('DOMDocument')) {
+        return false;
+    }
+
+    $source = @file_get_contents($filepath);
+    if ($source === false || preg_match('/<!DOCTYPE|<!ENTITY/i', $source)) {
+        return false;
+    }
+
+    $document = new DOMDocument();
+    $previous = libxml_use_internal_errors(true);
+    $loaded = $document->loadXML($source, LIBXML_NONET | LIBXML_NOBLANKS);
+    libxml_clear_errors();
+    libxml_use_internal_errors($previous);
+
+    if (!$loaded || !$document->documentElement || strtolower($document->documentElement->localName) !== 'svg') {
+        return false;
+    }
+
+    $allowed_elements = [
+        'svg', 'g', 'path', 'circle', 'ellipse', 'rect', 'line', 'polyline', 'polygon',
+        'text', 'tspan', 'title', 'desc', 'defs', 'lineargradient', 'radialgradient', 'stop',
+        'clippath', 'mask'
+    ];
+    $allowed_attributes = [
+        'id', 'xmlns', 'xmlns:xlink', 'viewbox', 'width', 'height', 'preserveaspectratio',
+        'version', 'fill', 'fill-rule', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap',
+        'stroke-linejoin', 'stroke-opacity', 'opacity', 'transform', 'd', 'cx', 'cy', 'r', 'rx',
+        'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points', 'offset', 'stop-color', 'stop-opacity',
+        'gradientunits', 'gradienttransform'
+    ];
+
+    $sanitize_node = function ($node) use (&$sanitize_node, $allowed_elements, $allowed_attributes) {
+        foreach (iterator_to_array($node->childNodes) as $child) {
+            if ($child instanceof DOMElement) {
+                if (!in_array(strtolower($child->localName), $allowed_elements, true)) {
+                    $node->removeChild($child);
+                    continue;
+                }
+                $sanitize_node($child);
+            } elseif ($child->nodeType !== XML_TEXT_NODE) {
+                $node->removeChild($child);
+            }
+        }
+
+        foreach (iterator_to_array($node->attributes) as $attribute) {
+            $name = strtolower($attribute->nodeName);
+            $value = trim($attribute->nodeValue);
+            if (!in_array($name, $allowed_attributes, true)
+                || preg_match('/(?:javascript:|data:|url\s*\(\s*(?!#))/i', $value)) {
+                $node->removeAttributeNode($attribute);
+            }
+        }
+    };
+
+    $sanitize_node($document->documentElement);
+    return @file_put_contents($filepath, $document->saveXML($document->documentElement)) !== false;
+}
+
+/**
  * Resize image using GD library
  */
 function resize_image($filepath, $max_width, $max_height) {
     if (!extension_loaded('gd')) {
-        return ['success' => false, 'error' => 'GD library is not installed'];
+        return ['success' => false, 'error' => 'Billedbehandling er ikke tilgængelig på serveren.'];
     }
 
     if (!file_exists($filepath)) {
-        return ['success' => false, 'error' => 'File not found'];
+        return ['success' => false, 'error' => 'Filen blev ikke fundet.'];
     }
 
     $ext = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
@@ -82,11 +151,11 @@ function resize_image($filepath, $max_width, $max_height) {
             $source = @imagecreatefromgif($filepath);
             break;
         default:
-            return ['success' => false, 'error' => 'Unsupported image format'];
+            return ['success' => false, 'error' => 'Billedformatet understøttes ikke.'];
     }
 
     if (!$source) {
-        return ['success' => false, 'error' => 'Failed to load image'];
+        return ['success' => false, 'error' => 'Billedet kunne ikke åbnes.'];
     }
 
     $width = imagesx($source);
