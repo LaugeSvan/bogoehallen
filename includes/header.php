@@ -17,6 +17,7 @@ $navigation = [
     ['label' => get_content('header', 'nav_board_label', 'Bestyrelsen'), 'url' => safe_navigation_url(get_content('header', 'nav_board_url', '/bestyrelsen.php'), '/bestyrelsen.php'), 'page' => 'bestyrelsen.php'],
     ['label' => get_content('header', 'nav_about_label', 'Om os'), 'url' => safe_navigation_url(get_content('header', 'nav_about_url', '/om-os.php'), '/om-os.php'), 'page' => 'om-os.php'],
     ['label' => get_content('header', 'nav_contact_label', 'Kontakt'), 'url' => safe_navigation_url(get_content('header', 'nav_contact_url', '/kontakt.php'), '/kontakt.php'), 'page' => 'kontakt.php'],
+    ['label' => 'Booking', 'url' => 'https://bogoe-ic.halbooking.dk', 'page' => ''],
 ];
 ?>
 <!DOCTYPE html>
