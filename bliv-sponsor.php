@@ -64,8 +64,8 @@ $page_title = 'Bliv Sponsor';
                 <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 4px;">
                     <h4 style="margin-bottom: 8px; font-size: 13px; font-weight: 600; text-transform: uppercase;">Email</h4>
                     <p>
-                        <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogohallen.dk')); ?>">
-                            <?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogohallen.dk')); ?>
+                        <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>">
+                            <?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>
                         </a>
                     </p>
                 </div>

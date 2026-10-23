@@ -121,6 +121,8 @@ if ($hours_result) {
 <?php if (count($sponsors) > 0): ?>
     <section class="section">
         <h2 class="section-title">Vores Sponsorer</h2>
+        <h4>Tak til vores sponsorer!</h4>
+        <h4>Har du lyst til at blive sponsor for Bogø Hallen, øens samlingspunkt, kontakt os på <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>"><?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?></a></h4>
 
         <div class="sponsors">
             <?php foreach ($sponsors as $sponsor): ?>

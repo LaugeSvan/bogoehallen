@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
 
                 if ($stmt->execute()) {
                     // Send email to admin
-                    $to = get_content('footer', 'contact_email', 'admin@bogohallen.dk');
+                    $to = get_content('footer', 'contact_email', 'admin@bogoehallen.dk');
                     $email_subject = 'Ny henvendelse: ' . $subject;
                     $email_message = "Navn: $name\nEmail: $email\n\nBesked:\n$message";
                     $headers = "From: $email\r\nReply-To: $email";
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
 
                 <div style="margin-bottom: 20px;">
                     <h4 style="color: var(--text-color); margin-bottom: 5px; font-size: 14px; text-transform: uppercase; font-weight: 600;">Email</h4>
-                    <p><a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogohallen.dk')); ?>"><?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogohallen.dk')); ?></a></p>
+                    <p><a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>"><?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?></a></p>
                 </div>
 
                 <div style="margin-bottom: 20px;">

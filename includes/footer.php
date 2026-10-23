@@ -16,8 +16,8 @@ $facebook_url = safe_navigation_url(get_content('footer', 'facebook_url', ''), '
                 <h3>Kontakt</h3>
                 <p><?php echo safe_html($address); ?></p>
                 <p>
-                    <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogohallen.dk')); ?>">
-                        <?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogohallen.dk')); ?>
+                    <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>">
+                        <?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>
                     </a>
                 </p>
             </div>
