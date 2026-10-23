@@ -14,6 +14,8 @@ $db = get_db_connection();
 
 $about_title = get_content('main', 'about_title', 'Velkommen til Bogø Hallen');
 $about_text = get_content('main', 'about_text', 'Bogø Hallen er Danmarks moderne idrætscenter med faciliteter til alle typer sport og aktiviteter.');
+$notice_title = get_content('home_notice', 'title', 'Praktisk information');
+$notice_content = get_content('home_notice', 'content', '');
 
 // Get gallery images
 $gallery_result = $db->query('SELECT id, image_path, caption FROM gallery_images ORDER BY sort_order ASC LIMIT 4');
@@ -62,6 +64,13 @@ if ($hours_result) {
         </div>
     </div>
 </section>
+
+<?php if (trim(strip_tags($notice_content)) !== ''): ?>
+    <section class="home-notice" aria-labelledby="home-notice-title">
+        <h2 id="home-notice-title"><?php echo safe_html($notice_title); ?></h2>
+        <div class="two-column-content"><?php echo sanitize_rich_text($notice_content); ?></div>
+    </section>
+<?php endif; ?>
 
 <!-- Gallery Section -->
 <section class="section">

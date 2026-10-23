@@ -137,10 +137,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
                     <p><?php echo safe_html(get_content('footer', 'cvr', 'CVR: 12345678')); ?></p>
                 </div>
 
-                <?php $facebook_url = get_content('footer', 'facebook_url', ''); if ($facebook_url): ?>
+                <?php $facebook_url = safe_navigation_url(get_content('footer', 'facebook_url', ''), ''); if ($facebook_url): ?>
                     <div>
                         <h4 style="color: var(--text-color); margin-bottom: 5px; font-size: 14px; text-transform: uppercase; font-weight: 600;">Social Media</h4>
-                        <p><a href="<?php echo safe_html($facebook_url); ?>" target="_blank">Facebook →</a></p>
+                        <p><a href="<?php echo safe_html($facebook_url); ?>" target="_blank" rel="noopener noreferrer">Facebook →</a></p>
                     </div>
                 <?php endif; ?>
             </div>

@@ -112,6 +112,30 @@ a:hover {
     margin-bottom: 60px;
 }
 
+.home-notice {
+    margin: 0 0 40px;
+    padding: 20px 24px;
+    border: 1px solid rgba(60, 133, 186, 0.35);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 12px;
+    background: var(--bg-panel);
+    box-shadow: var(--shadow-soft);
+}
+
+.home-notice h2 {
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+    color: var(--text-color);
+}
+
+.home-notice .two-column-content {
+    color: var(--text-light);
+}
+
+.home-notice .two-column-content p:last-child {
+    margin-bottom: 0;
+}
+
 .section-title {
     font-size: clamp(1.8rem, 2.8vw, 2.4rem);
     margin-bottom: 18px;

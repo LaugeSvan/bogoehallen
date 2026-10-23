@@ -93,9 +93,13 @@ Overview of system statistics and recent changes.
 ### Edit Content (`/admin/edit_content.php`)
 - Update main text, board page content, and logo
 - Edit all text, lists, and facts shown on the About page
-- Edit the displayed address, CVR, and opening hours
-- Contact form settings, navigation and footer links, social links, Maps location, and contact email cannot be changed in the admin panel
+- Edit the optional homepage notice box shown between the welcome section and gallery
+- Edit the contact email, address, CVR, Facebook link, Maps location, and opening hours
+- Navigation and contact-form labels, website title, and links (including booking) are fixed and cannot be changed in the admin panel
 - Manage opening hours for each day
+
+### Bylaws (`/admin/edit_bylaws.php`)
+- Edit the bylaws page title and formatted content separately from the other page content
 
 ### Gallery Manager (`/admin/edit_gallery.php`)
 - Upload gallery images (JPG, PNG, SVG supported)

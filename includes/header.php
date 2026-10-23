@@ -11,13 +11,14 @@ init_session();
 
 // Get header content
 $site_title = get_content('header', 'site_title', 'Bogø Hallen');
+$logo_alt = get_content('header', 'logo_alt', $site_title);
 $site_logo = normalize_upload_url(get_content('header', 'logo', ''));
 $navigation = [
     ['label' => get_content('header', 'nav_home_label', 'Forside'), 'url' => safe_navigation_url(get_content('header', 'nav_home_url', '/'), '/'), 'page' => 'index.php'],
     ['label' => get_content('header', 'nav_board_label', 'Bestyrelsen'), 'url' => safe_navigation_url(get_content('header', 'nav_board_url', '/bestyrelsen.php'), '/bestyrelsen.php'), 'page' => 'bestyrelsen.php'],
     ['label' => get_content('header', 'nav_about_label', 'Om os'), 'url' => safe_navigation_url(get_content('header', 'nav_about_url', '/om-os.php'), '/om-os.php'), 'page' => 'om-os.php'],
     ['label' => get_content('header', 'nav_contact_label', 'Kontakt'), 'url' => safe_navigation_url(get_content('header', 'nav_contact_url', '/kontakt.php'), '/kontakt.php'), 'page' => 'kontakt.php'],
-    ['label' => 'Booking', 'url' => 'https://bogoe-ic.halbooking.dk', 'page' => ''],
+    ['label' => get_content('header', 'nav_booking_label', 'Booking'), 'url' => safe_navigation_url(get_content('header', 'nav_booking_url', 'https://bogoe-ic.halbooking.dk'), 'https://bogoe-ic.halbooking.dk'), 'page' => ''],
 ];
 ?>
 <!DOCTYPE html>
@@ -35,7 +36,7 @@ $navigation = [
             <div class="logo">
                 <?php if ($site_logo): ?>
                     <a href="/" aria-label="<?php echo safe_html($site_title); ?> - Forside">
-                        <img src="<?php echo safe_html($site_logo); ?>" alt="<?php echo safe_html($site_title); ?>">
+                        <img src="<?php echo safe_html($site_logo); ?>" alt="<?php echo safe_html($logo_alt); ?>">
                     </a>
                 <?php else: ?>
                     <h1><?php echo safe_html($site_title); ?></h1>

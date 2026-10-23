@@ -231,6 +231,7 @@
             <ul>
                 <li><a href="/admin/dashboard.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'dashboard.php') ? 'active' : ''; ?>">Dashboard</a></li>
                 <li><a href="/admin/edit_content.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'edit_content.php') ? 'active' : ''; ?>">Indhold</a></li>
+                <li><a href="/admin/edit_bylaws.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'edit_bylaws.php') ? 'active' : ''; ?>">Vedtægter</a></li>
                 <li><a href="/admin/edit_gallery.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'edit_gallery.php') ? 'active' : ''; ?>">Galleri</a></li>
                 <li><a href="/admin/edit_sponsors.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'edit_sponsors.php') ? 'active' : ''; ?>">Sponsorer</a></li>
                 <li><a href="/admin/audit_log.php" class="<?php echo (basename($_SERVER['PHP_SELF']) === 'audit_log.php') ? 'active' : ''; ?>">Ændringslog</a></li>
