@@ -20,21 +20,28 @@ function initMobileNav() {
     const header = document.querySelector('.site-header');
     if (!header) return;
 
-    // Check if mobile menu button needs to be created
-    const nav = document.querySelector('.main-nav');
-    if (!nav) return;
+    const toggle = header.querySelector('.nav-toggle');
+    const nav = header.querySelector('.main-nav');
+    if (!toggle || !nav) return;
 
-    // Add mobile-friendly class on small screens
-    if (window.innerWidth < 768) {
-        document.body.classList.add('mobile-view');
-    }
+    const closeMenu = () => {
+        header.classList.remove('menu-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Åbn menu');
+    };
 
-    window.addEventListener('resize', function() {
-        if (window.innerWidth < 768) {
-            document.body.classList.add('mobile-view');
-        } else {
-            document.body.classList.remove('mobile-view');
-        }
+    toggle.addEventListener('click', () => {
+        const isOpen = header.classList.toggle('menu-open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', isOpen ? 'Luk menu' : 'Åbn menu');
+    });
+
+    nav.addEventListener('click', (event) => {
+        if (event.target.closest('a')) closeMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeMenu();
     });
 }
 

@@ -42,7 +42,12 @@ $navigation = [
                     <h1><?php echo safe_html($site_title); ?></h1>
                 <?php endif; ?>
             </div>
-            <nav class="main-nav">
+            <button class="nav-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Åbn menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="main-nav" id="site-navigation">
                 <ul>
                     <?php foreach ($navigation as $item): ?>
                         <li><a href="<?php echo safe_html($item['url']); ?>" class="<?php echo basename($_SERVER['PHP_SELF']) === $item['page'] ? 'active' : ''; ?>"><?php echo safe_html($item['label']); ?></a></li>

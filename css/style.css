@@ -77,6 +77,10 @@ a:hover {
     object-fit: contain;
 }
 
+.nav-toggle {
+    display: none;
+}
+
 .main-nav ul {
     display: flex;
     list-style: none;
@@ -576,13 +580,58 @@ button:active {
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
+        position: relative;
+        flex-direction: row;
+        gap: 12px;
+    }
+
+    .nav-toggle {
+        display: flex;
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        padding: 10px;
         flex-direction: column;
-        gap: 15px;
+        justify-content: center;
+        gap: 5px;
+        background: transparent;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+    }
+
+    .nav-toggle span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--text-color);
+    }
+
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        padding: 12px 20px 20px;
+        background: #111821;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .site-header.menu-open .main-nav {
+        display: block;
     }
 
     .main-nav ul {
         flex-direction: column;
         gap: 15px;
+        align-items: stretch;
+    }
+
+    .main-nav a {
+        display: block;
+        padding: 8px 0;
     }
 
     .hero {
@@ -621,7 +670,7 @@ button:active {
         font-size: 24px;
     }
 
-    button {
+    .site-main button {
         width: 100%;
     }
 
@@ -634,9 +683,6 @@ button:active {
         font-size: 20px;
     }
 
-    .main-nav ul {
-        gap: 20px;
-    }
 }
 
 @media (max-width: 480px) {

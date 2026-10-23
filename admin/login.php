@@ -195,6 +195,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 12px;
             color: var(--muted);
         }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #8fc5ed;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .home-link:hover {
+            color: var(--text);
+        }
     </style>
 </head>
 <body>
@@ -230,6 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="login-footer">
             <p>© <?php echo date('Y'); ?> Bogø Hallen - Admin Panel</p>
+            <a class="home-link" href="/">← Til forsiden</a>
         </div>
     </div>
 </body>
