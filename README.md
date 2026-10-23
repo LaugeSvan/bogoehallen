@@ -92,6 +92,7 @@ Overview of system statistics and recent changes.
 
 ### Edit Content (`/admin/edit_content.php`)
 - Update main text, board page content, and logo
+- Edit all text, lists, and facts shown on the About page
 - Edit the displayed address, CVR, and opening hours
 - Contact form settings, navigation and footer links, social links, Maps location, and contact email cannot be changed in the admin panel
 - Manage opening hours for each day

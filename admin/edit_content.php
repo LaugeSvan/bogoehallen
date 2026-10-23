@@ -6,6 +6,7 @@
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/includes/admin-functions.php';
 require_once __DIR__ . '/includes/image-handler.php';
+require_once __DIR__ . '/../includes/content-defaults.php';
 
 require_admin_login();
 
@@ -27,6 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
         if (isset($_POST['about_title'])) {
             set_content('main', 'about_title', $_POST['about_title'], $user_id);
             set_content('main', 'about_text', sanitize_rich_text($_POST['about_text'] ?? ''), $user_id);
+        }
+
+        if (isset($_POST['about_page_content'])) {
+            set_content('about_page', 'content', sanitize_rich_text($_POST['about_page_content']), $user_id);
         }
 
         if (isset($_POST['board_text'])) {
@@ -69,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
 // Get current content
 $about_title = get_content('main', 'about_title', 'Velkommen til Bogø Hallen');
 $about_text = get_content('main', 'about_text', 'Bogø Hallen er Danmarks moderne idrætscenter.');
+$about_page_content = get_content('about_page', 'content', get_about_page_default_content());
 $board_title = get_content('board', 'title', 'Bestyrelsen');
 $board_text = get_content('board', 'text', 'Bestyrelsen varetager Bogø Hallens daglige drift og udvikling. Kontakt os gerne via kontaktsiden.');
 $footer_address = get_content('footer', 'address', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod');
@@ -234,6 +240,21 @@ $opening_hours = get_opening_hours();
     </div>
 
     <div class="form-section">
+        <h3>Om os-sidens indhold</h3>
+        <div class="form-group">
+            <label for="about_page_content">Tekst, liste og fakta</label>
+            <div class="wysiwyg-toolbar" id="about_page_content_toolbar" hidden>
+                <button type="button" data-command="bold" aria-label="Fed" title="Fed"><strong>B</strong></button>
+                <button type="button" data-command="italic" aria-label="Kursiv" title="Kursiv"><em>I</em></button>
+                <button type="button" data-command="insertUnorderedList">Punktopstilling</button>
+                <button type="button" data-command="insertOrderedList">Nummereret liste</button>
+            </div>
+            <div id="about_page_content_editor" class="wysiwyg-editor" contenteditable="true" role="textbox" aria-label="Om os-sidens indhold" aria-multiline="true" hidden><?php echo sanitize_rich_text($about_page_content); ?></div>
+            <textarea id="about_page_content" name="about_page_content"><?php echo safe_html($about_page_content); ?></textarea>
+        </div>
+    </div>
+
+    <div class="form-section">
         <h3>Bestyrelsen</h3>
         <div class="form-group">
             <label for="board_title">Titel</label>
@@ -294,27 +315,28 @@ $opening_hours = get_opening_hours();
 </form>
 
 <script>
-const richText = document.getElementById('about_text_editor');
-const richTextInput = document.getElementById('about_text');
-const richTextToolbar = document.getElementById('about_text_toolbar');
-const contentForm = richTextInput.form;
+['about_text', 'about_page_content'].forEach((inputId) => {
+    const editor = document.getElementById(`${inputId}_editor`);
+    const input = document.getElementById(inputId);
+    const toolbar = document.getElementById(`${inputId}_toolbar`);
 
-richText.hidden = false;
-richTextToolbar.hidden = false;
-richTextInput.hidden = true;
+    editor.hidden = false;
+    toolbar.hidden = false;
+    input.hidden = true;
 
-richTextToolbar.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-command]');
-    if (!button) return;
-    richText.focus();
-    document.execCommand(button.dataset.command, false);
-});
-richTextToolbar.addEventListener('mousedown', (event) => {
-    if (event.target.closest('[data-command]')) event.preventDefault();
-});
+    toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-command]');
+        if (!button) return;
+        editor.focus();
+        document.execCommand(button.dataset.command, false);
+    });
+    toolbar.addEventListener('mousedown', (event) => {
+        if (event.target.closest('[data-command]')) event.preventDefault();
+    });
 
-contentForm.addEventListener('submit', () => {
-    richTextInput.value = richText.innerHTML;
+    input.form.addEventListener('submit', () => {
+        input.value = editor.innerHTML;
+    });
 });
 </script>
 

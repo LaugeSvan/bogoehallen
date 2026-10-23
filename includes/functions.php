@@ -3,6 +3,7 @@
  * Shared Functions for Frontend and Admin
  */
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/content-defaults.php';
 
 function get_content($section, $key, $default = '') {
     $db = get_db_connection();
