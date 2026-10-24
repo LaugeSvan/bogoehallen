@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form validation
     initFormValidation();
+
+    // Cookie consent
+    initCookieConsent();
 });
 
 /**
@@ -127,6 +130,27 @@ function setActiveNav() {
             (currentPath === '/' && link.getAttribute('href') === '/')) {
             link.classList.add('active');
         }
+    });
+}
+
+function initCookieConsent() {
+    const banner = document.getElementById('cookie-banner');
+    if (!banner) return;
+
+    const storedChoice = localStorage.getItem('bogoehallen-cookie-choice');
+    if (storedChoice === 'accept' || storedChoice === 'decline') {
+        banner.hidden = true;
+        return;
+    }
+
+    banner.hidden = false;
+
+    banner.querySelectorAll('[data-cookie-choice]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const choice = button.dataset.cookieChoice;
+            localStorage.setItem('bogoehallen-cookie-choice', choice);
+            banner.hidden = true;
+        });
     });
 }
 

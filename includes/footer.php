@@ -55,6 +55,22 @@ $facebook_url = safe_navigation_url(get_content('footer', 'facebook_url', ''), '
         </div>
     </footer>
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsActivityLocation",
+      "name": "<?php echo safe_html(get_content('header', 'site_title', 'Bogø Hallen')); ?>",
+      "description": "<?php echo safe_html(get_content('header', 'site_description', 'Bogø Hallen er et moderne idrætscenter på Bogø.')); ?>",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "<?php echo safe_html(get_content('footer', 'address', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod')); ?>",
+        "addressCountry": "DK"
+      },
+      "sameAs": [
+        "<?php echo safe_html(safe_navigation_url(get_content('footer', 'facebook_url', ''), '')); ?>"
+      ]
+    }
+    </script>
     <script src="/js/main.js"></script>
 </body>
 </html>

@@ -110,7 +110,14 @@ INSERT INTO content (section, `key`, value) VALUES
 ('footer', 'contact_url', '/kontakt.php'),
 ('footer', 'bylaws_url', '/vedtaegt.php'),
 ('footer', 'sponsor_url', '/bliv-sponsor.php'),
-('footer', 'google_maps_query', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod');
+('footer', 'google_maps_query', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod'),
+('site_meta', 'site_name', 'Bogø Hallen'),
+('site_meta', 'site_description', 'Bogø Hallen er et moderne idrætscenter på Bogø med sport, aktiviteter og fællesskab for alle.'),
+('site_meta', 'site_url', 'https://www.bogoehallen.dk'),
+('site_meta', 'canonical_url', 'https://www.bogoehallen.dk'),
+('site_meta', 'og_image', ''),
+('site_meta', 'theme_color', '#0f1419'),
+('site_meta', 'cookie_text', 'Vi bruger cookies til at forbedre din oplevelse og sikre, at siden fungerer optimalt.');
 
 -- Insert opening hours
 INSERT INTO content (section, `key`, value) VALUES

@@ -18,6 +18,15 @@ $success = '';
 $error = '';
 
 $content_setting_sections = [
+    'Site SEO' => [
+        ['site_meta', 'site_name', 'Websted navn', 'text', 'Bogø Hallen'],
+        ['site_meta', 'site_description', 'Meta beskrivelse', 'text', 'Bogø Hallen er et moderne idrætscenter på Bogø med sport, aktiviteter og fællesskab for alle.'],
+        ['site_meta', 'site_url', 'Websted URL', 'url', 'https://www.bogoehallen.dk'],
+        ['site_meta', 'canonical_url', 'Canonical URL', 'url', 'https://www.bogoehallen.dk'],
+        ['site_meta', 'og_image', 'Open Graph billede URL', 'url', ''],
+        ['site_meta', 'theme_color', 'Tema farve', 'text', '#0f1419'],
+        ['site_meta', 'cookie_text', 'Cookie tekst', 'text', 'Vi bruger cookies til at forbedre din oplevelse og sikre, at siden fungerer optimalt.'],
+    ],
     'Contact and footer' => [
         ['footer', 'address', 'Adresse', 'text', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod'],
         ['footer', 'contact_email', 'Kontakt-email', 'email', 'kontakt@bogoehallen.dk'],

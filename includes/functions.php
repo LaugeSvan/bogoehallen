@@ -52,3 +52,37 @@ function get_sponsors() {
     $stmt->close();
     return $sponsors;
 }
+
+function get_site_meta_value($key, $default = '') {
+    $value = get_content('site_meta', $key, $default);
+    return trim((string) $value) !== '' ? $value : $default;
+}
+
+function get_current_canonical_url() {
+    $host = $_SERVER['HTTP_HOST'] ?? 'www.bogoehallen.dk';
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
+    $path = $_SERVER['REQUEST_URI'] ?? '/';
+    $path = parse_url($path, PHP_URL_PATH) ?: '/';
+
+    return $scheme . '://' . $host . $path;
+}
+
+function get_site_meta_data() {
+    $site_name = get_site_meta_value('site_name', 'Bogø Hallen');
+    $site_description = get_site_meta_value('site_description', 'Bogø Hallen er et moderne idrætscenter på Bogø med sport, aktiviteter og fællesskab for alle.');
+    $site_url = get_site_meta_value('site_url', SITE_URL);
+    $canonical_url = get_site_meta_value('canonical_url', $site_url);
+    $og_image = normalize_upload_url(get_site_meta_value('og_image', ''));
+    $theme_color = get_site_meta_value('theme_color', '#0f1419');
+    $cookie_text = get_site_meta_value('cookie_text', 'Vi bruger cookies til at forbedre din oplevelse og sikre, at siden fungerer optimalt.');
+
+    return [
+        'site_name' => $site_name,
+        'site_description' => $site_description,
+        'site_url' => $site_url,
+        'canonical_url' => $canonical_url,
+        'og_image' => $og_image,
+        'theme_color' => $theme_color,
+        'cookie_text' => $cookie_text,
+    ];
+}

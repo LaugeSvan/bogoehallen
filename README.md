@@ -1,222 +1,159 @@
 # Bogø Hallen Website
 
-A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) with a custom admin panel for managing content, images, and sponsors.
+A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) with a custom admin panel for managing content, images, sponsors, SEO metadata, and contact data.
 
-## Features
+## What is included
 
 ### Frontend
-- **Responsive Design**: Mobile-first responsive layout using CSS Grid/Flexbox
-- **Dynamic Content**: Homepage displays gallery, about text, opening hours, and sponsors from database
-- **Google Maps**: Footer map and link use an editable location
-- **Public Pages**:
-  - Forside (Homepage)
-   - Bestyrelsen (Board)
-  - Om os (About)
-  - Kontakt (Contact form with email submission)
-  - Vedtægt (Constitution/Bylaws)
-  - Bliv sponsor (Become Sponsor)
+- Responsive multi-page website for a single facility website
+- Homepage, board page, about page, contact page, bylaws page, and sponsor page
+- Dynamic content from MySQL
+- Google Maps embed and footer contact details
+- SEO metadata, canonical URLs, Open Graph tags, `robots.txt`, and sitemap support
+- Cookie consent banner for compliant basic cookie handling
 
-### Admin Panel
-- **Secure Authentication**: Session-based login with bcrypt password hashing
-- **Content Management**:
-   - Edit main and board text, logo, address, CVR, and opening hours
-   - Contact form settings, navigation and footer links, social links, and Google Maps location are fixed and not editable in the admin panel
-   - Format main text with the built-in rich-text toolbar
-  - Manage gallery images with auto-resize
-  - Manage sponsor logos and links
-- **Audit Log**: Track all changes with user, timestamp, and action details
-- **Role-Based Access**: Super Admin and Editor roles
-- **Security**: CSRF protection, prepared SQL statements, input sanitization
+### Admin panel
+- Secure session-based login with role-based access
+- Content editor for header/footer, page content, opening hours, SEO settings, and cookie text
+- Upload manager for gallery and sponsor images
+- Audit log for all admin actions
+- CSRF protection, prepared statements, validation, and password hashing
+- Hardened `.htaccess` security headers and HTTPS enforcement
 
-## Technology Stack
+## Technology stack
 
-- **Backend**: PHP 7.4+ (8.x recommended)
-- **Database**: MySQL 5.7+ (with InnoDB)
-- **Frontend**: HTML5, CSS3 (Flexbox/Grid), Vanilla JavaScript
-- **Hosting**: Simply.com shared hosting (or any PHP hosting)
-- **Libraries**: None - pure PHP, no dependencies
+- Backend: PHP 8.x
+- Database: MySQL 8 / MariaDB-compatible SQL
+- Frontend: HTML5, CSS3, vanilla JavaScript
+- Hosting: shared hosting / Apache-compatible hosting
+- Dependencies: none (pure PHP)
 
-## Installation
+## Local development
 
-### Prerequisites
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- FTP/SSH access to Simply.com hosting
-- MySQL database and user created
+### Option 1: Docker Compose
+```bash
+docker compose up --build
+```
+Then open:
+- Public site: http://localhost:8080
+- MySQL: localhost:3307
 
-### Step 1: Upload Files
-1. Download all project files
-2. Upload via FTP to your Simply.com hosting (typically to `public_html/`)
-3. Ensure `.htaccess` file is uploaded (may be hidden)
+The container uses `APP_ENV=development` and environment variables from `docker-compose.yml`.
 
-### Step 2: Configure Database Credentials
-
-1. Copy `config.example.php` to `config.php`.
-2. Edit `config.php` with the host, database name, username, and password supplied by Simply.com.
-3. Upload `config.php` to the site root over SFTP. The file is excluded from Git and automated deployment.
-4. Never commit or expose `config.php` through a public URL.
-
-### Step 3: Create Database Schema
-
-1. Open MySQL administration panel (phpMyAdmin on Simply.com)
-2. Create a new database (use the name from setup)
-3. Import `INSTALL.sql`:
-   - Copy entire contents of `INSTALL.sql`
-   - Paste into SQL query window in phpMyAdmin
-   - Execute
-
-### Step 4: Set Permissions
-1. Set `/admin/uploads/` folder permissions to 755:
+### Option 2: Local PHP + MySQL
+1. Copy `config.example.php` to `config.php`
+2. Fill in your local database details
+3. Create the database and import `INSTALL.sql`
+4. Start PHP:
    ```bash
-   mkdir -p admin/uploads
-   chmod 755 admin/uploads
+   php -S localhost:8000
    ```
 
-2. Ensure PHP can write to `/logs/` (the app creates the directory when needed):
-   ```bash
-   mkdir -p logs
-   chmod 755 logs
-   ```
+## Production setup (Simply.com)
 
-### Step 5: Access Admin Panel
-1. Navigate to `https://yoursite.dk/admin/login.php`
-2. Login with default credentials:
-   - **Username**: `admin`
-   - **Password**: `admin123`
-3. **⚠️ IMPORTANT**: Change the admin password immediately!
+### 1) Configure credentials
+1. Copy `config.example.php` to `config.php`
+2. Update database and site URL values
+3. Upload `config.php` to the project root over SFTP
+4. Keep it out of Git and public repositories
 
-## Admin Panel Usage
-
-### Dashboard (`/admin/dashboard.php`)
-Overview of system statistics and recent changes.
-
-### Edit Content (`/admin/edit_content.php`)
-- Update main text, board page content, and logo
-- Edit all text, lists, and facts shown on the About page
-- Edit the optional homepage notice box shown between the welcome section and gallery
-- Edit the contact email, address, CVR, Facebook link, Maps location, and opening hours
-- Navigation and contact-form labels, website title, and links (including booking) are fixed and cannot be changed in the admin panel
-- Manage opening hours for each day
-
-### Bylaws (`/admin/edit_bylaws.php`)
-- Edit the bylaws page title and formatted content separately from the other page content
-
-### Gallery Manager (`/admin/edit_gallery.php`)
-- Upload gallery images (JPG, PNG, SVG supported)
-- Add or edit captions and display order
-- Delete images
-
-### Sponsor Manager (`/admin/edit_sponsors.php`)
-- Add new sponsors with logo and link
-- Edit sponsor name, logo, link, and display order
-- Delete sponsors
-
-### Audit Log (`/admin/audit_log.php`)
-- View all changes made in the system
-- See who made the change and when
-- Track modifications to content, images, and sponsors
-
-## Folder Structure
-
-```
-/bogo-hallen/
-├── config.example.php      # Safe database configuration template
-├── config.php              # Private database credentials (not committed)
-├── INSTALL.sql             # Database schema
-├── sample-data.sql         # Optional sample data
-├── README.md               # This file
-├── .htaccess               # Server configuration
-├── .gitignore              # Git configuration
-│
-├── /admin/
-│   ├── login.php           # Admin login page
-│   ├── logout.php          # Logout handler
-│   ├── dashboard.php       # Admin dashboard
-│   ├── edit_content.php    # Content editor
-│   ├── edit_gallery.php    # Gallery manager
-│   ├── edit_sponsors.php   # Sponsor manager
-│   ├── audit_log.php       # Audit log viewer
-│   │
-│   ├── /includes/
-│   │   ├── header.php      # Admin template header
-│   │   ├── footer.php      # Admin template footer
-│   │   ├── admin-functions.php
-│   │   └── image-handler.php
-│   │
-│   └── /uploads/           # User-uploaded images (auto-created)
-│
-├── /includes/
-│   ├── header.php          # Frontend header template
-│   ├── footer.php          # Frontend footer template
-│   └── security.php        # Security utilities
-│
-├── /css/
-│   └── style.css           # Main stylesheet
-│
-├── /js/
-│   └── main.js             # Frontend JavaScript
-│
-├── /logs/
-│   └── errors.log          # Error log (auto-created)
-│
-├── Public Pages:
-│   ├── index.php           # Homepage
-│   ├── bestyrelsen.php     # Board page
-│   ├── om-os.php           # About page
-│   ├── kontakt.php         # Contact page
-│   ├── vedtaegt.php        # Constitution page
-│   └── bliv-sponsor.php    # Become sponsor page
+### 2) Set permissions
+```bash
+mkdir -p admin/uploads logs
+chmod 755 admin/uploads logs
 ```
 
-## Database Schema
+### 3) Import database schema
+Import `INSTALL.sql` into your MySQL database.
 
-### users
-- `id` (INT, PK)
-- `username` (VARCHAR 50, UNIQUE)
-- `password` (VARCHAR 255, bcrypt hashed)
-- `role` (ENUM: 'super_admin', 'editor')
-- `created_at` (DATETIME)
+### 4) Access admin
+Open:
+- `https://yourdomain.dk/admin/login.php`
 
-### content
-- `id` (INT, PK)
-- `section` (VARCHAR 50)
-- `key` (VARCHAR 50)
-- `value` (LONGTEXT)
-- `updated_at` (DATETIME)
+Default user:
+- Username: `admin`
+- Password: `admin123`
 
-### gallery_images
-- `id` (INT, PK)
-- `image_path` (VARCHAR 255)
-- `caption` (VARCHAR 100)
-- `sort_order` (INT)
-- `created_at` (DATETIME)
+Important: change the password immediately after first login.
 
-### sponsors
-- `id` (INT, PK)
-- `name` (VARCHAR 100)
-- `logo` (VARCHAR 255)
-- `link` (VARCHAR 255)
-- `sort_order` (INT)
-- `created_at` (DATETIME)
+## Admin panel usage
 
-### contact_submissions
-- `id` (INT, PK)
-- `name` (VARCHAR 100)
-- `email` (VARCHAR 100)
-- `subject` (VARCHAR 100)
-- `message` (TEXT)
-- `submitted_at` (DATETIME)
-- `read_status` (TINYINT)
+### Dashboard
+Overview of users, sponsor count, gallery count, and recent changes.
 
-### audit_log
-- `id` (INT, PK)
-- `user_id` (INT, FK to users)
-- `action` (VARCHAR 50)
-- `table_affected` (VARCHAR 50)
-- `record_id` (INT)
-- `old_value` (LONGTEXT, JSON)
-- `new_value` (LONGTEXT, JSON)
-- `timestamp` (DATETIME)
+### Edit content
+Update:
+- Site title and description
+- Contact details and Maps query
+- Homepage hero text
+- About page text
+- Footer links
+- SEO settings and cookie notice
+- Opening hours
+
+### Gallery and sponsors
+Upload images, add captions, and set display order.
+
+### Audit log
+Review who changed what and when.
+
+## Security notes
+
+This project includes:
+- HTTPS redirection
+- Strict transport security
+- Content Security Policy
+- CSRF validation on forms
+- Prepared SQL statements
+- Password hashing with bcrypt
+- Session cookies with HttpOnly and SameSite settings
+
+## Project structure
+
+```text
+/
+├── .htaccess
+├── .gitignore
+├── INSTALL.sql
+├── README.md
+├── SECURE-SETUP.md
+├── robots.txt
+├── sitemap.php
+├── config.example.php
+├── docker-compose.yml
+├── admin/
+│   ├── audit_log.php
+│   ├── dashboard.php
+│   ├── edit_content.php
+│   ├── edit_gallery.php
+│   ├── edit_sponsors.php
+│   ├── login.php
+│   ├── logout.php
+│   └── includes/
+├── includes/
+│   ├── content-defaults.php
+│   ├── footer.php
+│   ├── functions.php
+│   ├── header.php
+│   └── security.php
+├── css/
+├── js/
+├── logs/
+├── admin/uploads/
+├── index.php
+├── om-os.php
+├── kontakt.php
+├── vedtaegt.php
+├── bliv-sponsor.php
+├── bestyrelsen.php
+└── sitemap.php
+```
+
+## Notes
+
+- This is designed as a single-site public website with an admin dashboard, not a multi-site platform.
+- The code intentionally avoids external dependencies so it works well on shared hosting.
+- The project includes site metadata and business settings in the database so the site can be maintained without changing code.
 
 ## Security Best Practices
 
