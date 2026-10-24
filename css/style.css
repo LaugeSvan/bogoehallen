@@ -453,6 +453,11 @@ select:focus-visible {
     font-size: 1.2rem;
 }
 
+.contact-email-intro {
+    margin-bottom: 20px;
+    color: var(--text-light);
+}
+
 .contact-info-item,
 .sponsor-contact-item {
     margin-bottom: 18px;
