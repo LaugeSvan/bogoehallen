@@ -40,3 +40,23 @@ function get_bylaws_default_content() {
 <p><strong>Sidst opdateret:</strong> Januar 2024<br>
 <strong>Version:</strong> 1.0</p>';
 }
+
+function get_sponsor_page_default_content() {
+    return '<h3>Hvorfor blive sponsor?</h3>
+<p>Som sponsor af Bogø Hallen får din virksomhed:</p>
+<ul>
+    <li><strong>Synlighed:</strong> Dit logo vises på vores hjemmeside, sociale medier og på centeret</li>
+    <li><strong>Goodwill:</strong> Styrk dit brand gennem engagement i lokal sport og fællesskab</li>
+    <li><strong>Netværk:</strong> Kontakt med andre virksomheder og lokale ledere</li>
+    <li><strong>Skattefradrag:</strong> Sponsorbidrag kan være fradragsberettiget (kontakt revisor)</li>
+    <li><strong>Særlige arrangementer:</strong> Mulighed for at være sponsor på specielle events og turneringer</li>
+</ul>
+<h3>Sponsorniveauer</h3>
+<p>Vi tilbyder tre sponsorniveauer, som kan tilpasses dit budget:</p>
+<ul>
+    <li><strong>Guldspons:</strong> 50.000+ kr. pr. år</li>
+    <li><strong>Sølvspons:</strong> 25.000-49.999 kr. pr. år</li>
+    <li><strong>Bronzespons:</strong> 10.000-24.999 kr. pr. år</li>
+</ul>
+<p>Hver sponsorpakke kan tilpasses dine behov. Kontakt os for at diskutere muligheder.</p>';
+}

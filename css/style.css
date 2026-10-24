@@ -448,7 +448,7 @@ select:focus-visible {
 }
 
 .contact-info-card > h3,
-.sponsor-contact-card > h3 {
+.sponsor-contact-card > h2 {
     margin-bottom: 20px;
     font-size: 1.2rem;
 }
@@ -485,20 +485,8 @@ select:focus-visible {
     overflow-wrap: anywhere;
 }
 
-.two-column-content .sponsor-subheading {
-    margin: 24px 0 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 1.2rem;
-}
-
-.two-column-content .sponsor-benefits {
-    margin: 0 0 24px 1.3rem;
-}
-
-.sponsor-benefits li {
-    margin-bottom: 8px;
-    padding-left: 4px;
+.sponsor-page-cta {
+    margin-top: 24px;
 }
 
 .sponsor-contact-intro {

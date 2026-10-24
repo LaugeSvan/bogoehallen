@@ -15,6 +15,7 @@ A modern, database-driven PHP website for Bogø Hallen (Bogø Idrætscenter) wit
 ### Admin panel
 - Secure session-based login with role-based access
 - Content editor for header/footer, page content, opening hours, SEO settings, and cookie text
+- Dedicated editor for the “Bliv sponsor” page, including its introduction, sponsor information, and contact copy
 - Upload manager for gallery and sponsor images
 - Audit log for all admin actions
 - CSRF protection, prepared statements, validation, and password hashing
@@ -90,6 +91,9 @@ Update:
 - Footer links
 - SEO settings and cookie notice
 - Opening hours
+
+### Edit sponsor page
+Use **Bliv sponsor** in the admin menu to update the page title, introduction, sponsor information, and contact-card text. Contact email, address, and CVR are shared with the site-wide contact details.
 
 ### Gallery and sponsors
 Upload images, add captions, and set display order.
