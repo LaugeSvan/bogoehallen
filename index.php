@@ -14,6 +14,7 @@ $db = get_db_connection();
 
 $about_title = get_content('main', 'about_title', 'Velkommen til Bogø Hallen');
 $about_text = get_content('main', 'about_text', 'Bogø Hallen er Danmarks moderne idrætscenter med faciliteter til alle typer sport og aktiviteter.');
+$booking_url = safe_navigation_url(get_content('header', 'nav_booking_url', 'https://bogoe-ic.halbooking.dk'), 'https://bogoe-ic.halbooking.dk');
 $notice_title = get_content('home_notice', 'title', 'Praktisk information');
 $notice_content = get_content('home_notice', 'content', '');
 
@@ -44,7 +45,7 @@ if ($hours_result) {
         <h1><?php echo safe_html($about_title); ?></h1>
         <p class="hero-text"><?php echo safe_html(strip_tags($about_text)); ?></p>
         <div class="cta-row">
-            <a class="button primary" href="#aabningstider">Se åbningstider</a>
+            <a class="button primary" href="<?php echo safe_html($booking_url); ?>">Book hallen</a>
             <a class="button secondary" href="/kontakt.php">Kontakt os</a>
         </div>
     </div>
@@ -81,48 +82,21 @@ if ($hours_result) {
         <?php foreach ($gallery as $item): ?>
             <?php $image_url = normalize_upload_url($item['image_path'] ?? ''); ?>
             <div class="gallery-item">
-                <img src="<?php echo safe_html($image_url); ?>" alt="<?php echo safe_html($item['caption']); ?>">
+                <a class="gallery-image-link" href="<?php echo safe_html($image_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo safe_html('Vis billede i fuld størrelse' . ($item['caption'] ? ': ' . $item['caption'] : '')); ?>">
+                    <img src="<?php echo safe_html($image_url); ?>" alt="<?php echo safe_html($item['caption']); ?>" loading="lazy">
+                </a>
                 <div class="gallery-item-caption"><?php echo safe_html($item['caption'] ?: ''); ?></div>
             </div>
         <?php endforeach; ?>
     </div>
 </section>
 
-<!-- About and Opening Hours Section -->
-<section class="section" id="aabningstider">
-    <h2 class="section-title"><?php echo safe_html($about_title); ?></h2>
+<!-- About Section -->
+<section class="section">
+    <h2 class="section-title">Om Bogø Hallen</h2>
 
-    <div class="two-column">
-        <div class="two-column-content">
-            <?php echo sanitize_rich_text($about_text); ?>
-        </div>
-
-        <div>
-            <div class="opening-hours">
-                <h4>Åbningstider</h4>
-                <ul>
-                    <?php
-                    $days_labels = [
-                        'monday' => 'Mandag',
-                        'tuesday' => 'Tirsdag',
-                        'wednesday' => 'Onsdag',
-                        'thursday' => 'Torsdag',
-                        'friday' => 'Fredag',
-                        'saturday' => 'Lørdag',
-                        'sunday' => 'Søndag'
-                    ];
-
-                    foreach ($days_labels as $day_key => $day_name):
-                        $time = $opening_hours[$day_key] ?? 'Lukket';
-                    ?>
-                        <li>
-                            <span class="day-name"><?php echo $day_name; ?></span>
-                            <span class="day-time"><?php echo safe_html($time); ?></span>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
+    <div class="two-column-content page-reading-column">
+        <?php echo sanitize_rich_text($about_text); ?>
     </div>
 </section>
 
@@ -130,8 +104,7 @@ if ($hours_result) {
 <?php if (count($sponsors) > 0): ?>
     <section class="section">
         <h2 class="section-title">Vores Sponsorer</h2>
-        <h4>Tak til vores sponsorer!</h4>
-        <h4>Har du lyst til at blive sponsor for Bogø Hallen, øens samlingspunkt, kontakt os på <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>"><?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?></a></h4>
+        <p class="section-subtitle">Tak til vores sponsorer! Har du lyst til at støtte Bogø Hallen, øens samlingspunkt? <a href="/bliv-sponsor.php">Læs om at blive sponsor</a> eller kontakt os på <a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>"><?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?></a>.</p>
 
         <div class="sponsors">
             <?php foreach ($sponsors as $sponsor): ?>

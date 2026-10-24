@@ -119,27 +119,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'])) {
         </div>
 
         <div>
-            <div style="background: #f9f9f9; padding: 30px; border-radius: 4px;">
-                <h3 style="margin-bottom: 20px; font-size: 18px;">Kontaktoplysninger</h3>
+            <div class="contact-info-card">
+                <h3>Kontaktoplysninger</h3>
 
-                <div style="margin-bottom: 20px;">
-                    <h4 style="color: var(--text-color); margin-bottom: 5px; font-size: 14px; text-transform: uppercase; font-weight: 600;">Adresse</h4>
+                <div class="contact-info-item">
+                    <h4>Adresse</h4>
                     <p><?php echo safe_html(get_content('footer', 'address', 'Bogø Idrætscenter, Bogø Idrætspark 1, 4773 Kalvebod')); ?></p>
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <h4 style="color: var(--text-color); margin-bottom: 5px; font-size: 14px; text-transform: uppercase; font-weight: 600;">Email</h4>
+                <div class="contact-info-item">
+                    <h4>Email</h4>
                     <p><a href="mailto:<?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?>"><?php echo safe_html(get_content('footer', 'contact_email', 'kontakt@bogoehallen.dk')); ?></a></p>
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <h4 style="color: var(--text-color); margin-bottom: 5px; font-size: 14px; text-transform: uppercase; font-weight: 600;">CVR</h4>
+                <div class="contact-info-item">
+                    <h4>CVR</h4>
                     <p><?php echo safe_html(get_content('footer', 'cvr', 'CVR: 12345678')); ?></p>
                 </div>
 
                 <?php $facebook_url = safe_navigation_url(get_content('footer', 'facebook_url', ''), ''); if ($facebook_url): ?>
-                    <div>
-                        <h4 style="color: var(--text-color); margin-bottom: 5px; font-size: 14px; text-transform: uppercase; font-weight: 600;">Social Media</h4>
+                    <div class="contact-info-item">
+                        <h4>Social Media</h4>
                         <p><a href="<?php echo safe_html($facebook_url); ?>" target="_blank" rel="noopener noreferrer">Facebook →</a></p>
                     </div>
                 <?php endif; ?>
